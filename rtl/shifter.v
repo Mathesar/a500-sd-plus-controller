@@ -40,9 +40,11 @@ module shifter(
     reg seq_enable;
     
     // mode
-    always @(posedge clk)
+    always @(posedge clk or posedge rst)
     begin
-        if(start_write)
+        if(rst) // async reset
+            read_mode <= 1'b0;
+        else if(start_write)
             read_mode <= 1'b0;
         else if(start_read)
             read_mode <= 1'b1;               
@@ -71,7 +73,7 @@ module shifter(
     always @(posedge clk or posedge rst)
     begin
         if(rst) // async reset
-            sequencer[4:0] <= 5'b0_xxxx;
+            sequencer[4:0] <= 5'b0_0000;
         else if(busy && turbo_mode)
             sequencer[4:1] <= sequencer[4:1] + 1'b1;
         else if(busy && seq_enable)
@@ -84,9 +86,11 @@ module shifter(
     assign sample = busy & ((seq_enable & ~sequencer[0]) | turbo_mode);
         
     // main shifter and MOSI
-    always @(posedge clk)
+    always @(posedge clk or posedge rst)
     begin
-        if(busy && shift)
+        if(rst) // async reset
+            shifter[7:0] <= 7'b0000_0000;
+        else if(busy && shift)
             shifter[7:0] <= {shifter[6:0],miso_latch};
         else if(start_write)
             shifter[7:0] <= data_in[7:0];          
@@ -98,7 +102,7 @@ module shifter(
     always @(negedge clk)
     begin
         if(sample)
-            miso_latch <= miso;//miso is latched half a clock cycle too early in non-turbo modes, 
+            miso_latch <= miso; // not perfect: miso is latched half a clock cycle too early in non-turbo modes, 
     end
         
     //glitchfree gated turbo SCLK generator

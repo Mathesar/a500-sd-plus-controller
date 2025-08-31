@@ -18,10 +18,11 @@
 `define  DEVICE_BASE        24'hEC0000
 
 module spi_controller(
-    input       clk7,               // 7MHz CPU/BUS clock
-    input       _rst,               // reset
+    input       cck,                // color clock
+    input       cckq,               // quadrature clock
+    input       _reset,             // reset
     input       _as,                // address strobe
-    input       _lds,               // lower data strobe
+    input       _ds,                // data strobe
     input       r_w,                // read / _write
     output      xrdy,               // external ready
     input       [23:17]adr,         // address
@@ -38,15 +39,18 @@ module spi_controller(
     reg  [5:0]ctrl_reg;
     reg  [7:0]data_out_latch;
     
+    // generate 7M cpu clock
+    assign clk7 = cck ~^ cckq;
+    
     // reset synchronizer
-    always @(posedge clk7 or negedge _rst)
+    always @(posedge clk7 or negedge _reset)
     begin
-        if (!_rst)
+        if (!_reset)
             rst_sync[1:0] <= 2'b11; //async preset
         else
             rst_sync[1:0] <= {rst_sync[0],1'b0};
     end
-    assign reset = rst_sync[1];
+    assign rst = rst_sync[1];
             
     // address decoder, device occupies 256K address block
     localparam device_base = `DEVICE_BASE;
@@ -57,9 +61,9 @@ module spi_controller(
     begin
         if( _as )
             command_done <= 1'b0; // async clear
-        else if (reset)
+        else if (rst)
             command_done <= 1'b0; // reset
-        else if( base_decode && !_lds && !busy )
+        else if( base_decode && !_ds && !busy )
             command_done <= 1'b1;
     end
     
@@ -68,7 +72,7 @@ module spi_controller(
     
     // control signals
     assign enable_data_out = base_decode & r_w & command_done;
-    assign command_strobe  = base_decode & ~_lds & ~busy & ~command_done;
+    assign command_strobe  = base_decode & ~_ds & ~busy & ~command_done;
     assign start_write     = command_strobe & ~adr[17] & ~r_w; 
     assign start_read      = command_strobe &  adr[17] &  r_w; 
     assign latch_data_out  = command_strobe &             r_w;
@@ -77,7 +81,7 @@ module spi_controller(
     // ctrl register
     always @(posedge clk7)
     begin
-        if( reset )
+        if( rst )
             ctrl_reg[5:0] <= 6'b0; // reset
         if( write_ctrl_reg )
             ctrl_reg[5:0] <= data[5:0];
@@ -86,7 +90,7 @@ module spi_controller(
     // shifter
     shifter SHIFT (
         .clk         (clk7),             
-        .rst         (reset),              
+        .rst         (rst),              
         .start_write (start_write),      
         .start_read  (start_read),       
         .data_in     (data),    
