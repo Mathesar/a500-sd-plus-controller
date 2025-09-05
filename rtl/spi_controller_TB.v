@@ -16,6 +16,14 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+// register map
+`define shifter_read_reg                24'hEC0001
+`define shifter_read_and_shift_reg      24'hEC0101
+`define shifter_write_and_shift_reg     24'hEC0201
+`define select_reg                      24'hEC0301
+`define control_reg                     24'hEC0401
+
+
 module spi_controller_TB();
 
     // inputs to DUT
@@ -29,6 +37,7 @@ module spi_controller_TB();
     reg _as;
     reg _ds;
     reg [31:0] miso;
+    reg [31:0] mosi_data;
     
     
     // outputs from DUT
@@ -53,7 +62,8 @@ module spi_controller_TB();
         ._ds(_ds),
         .r_w(r_w),
         .xrdy(xrdy),
-        .adr(address[23:17]),
+        .adr_h(address[23:18]),
+        .adr_l(address[11:8]),
         .data(data[7:0]),
         .miso(miso[31]),
         .mosi(mosi),
@@ -89,8 +99,15 @@ module spi_controller_TB();
                 miso = {miso[30:0],miso[31]};
         end
     end
-       
     
+    // mosi shifter
+    initial begin
+        forever begin
+            @(posedge sclk)
+                mosi_data = {mosi_data[30:0],mosi};
+        end
+    end
+        
     initial begin
     _rst = 0;    
     _as = 1;
@@ -101,39 +118,54 @@ module spi_controller_TB();
     _rst = 1;
     #300;
     
+    $display ("Testbench begin");
+    
     //read 4 bytes @ turbo speed
     miso = 32'hdeadbeef;   
-    write68k(24'hEE0000, 'b10_0001);    // assert CS          
-    write68k(24'hEC0000, 'hff);         // we need to write first to shift in first byte    
-    read68k(24'hEE0000, d[31:24]);
-    read68k(24'hEE0000, d[23:16]);
-    read68k(24'hEE0000, d[15:8]);
-    read68k(24'hEC0000, d[7:0]);            
-    write68k(24'hEE0000, 'b10_0000); // de-assert CS           
-    if(d != 32'hdeadbeef) $display ("DIV32 mode read failed");
+    write68k(`control_reg, 'b10);        
+    write68k(`select_reg,  'b0001);                     // assert CS          
+    write68k(`shifter_write_and_shift_reg, 'hff);       // we need to write first to shift in first byte    
+    read68k(`shifter_read_and_shift_reg, d[31:24]);
+    read68k(`shifter_read_and_shift_reg, d[23:16]);
+    read68k(`shifter_read_and_shift_reg, d[15:8]);
+    read68k(`shifter_read_reg,           d[7:0]);            
+    write68k(`select_reg, 'b0000);                      // de-assert CS           
+    if(d != 32'hdeadbeef) $display ("TURBO mode read failed");
 
     
     //read 4 bytes @ slowest speed
     miso = 32'habba1234; 
-    write68k(24'hEE0000, 'b00_0001);    // assert CS              
-    write68k(24'hEC0000, 'hff);         // we need to write first to shift in first byte    
-    read68k(24'hEE0000, d[31:24]);
-    read68k(24'hEE0000, d[23:16]);
-    read68k(24'hEE0000, d[15:8]);
-    read68k(24'hEC0000, d[7:0]);            
-    write68k(24'hEE0000, 'b00_0000);    // de-assert CS           
-    if(d != 32'habba1234) $display ("turbo mode read failed");
-
+    write68k(`control_reg, 'b00);        
+    write68k(`select_reg,  'b0001);                     // assert CS          
+    write68k(`shifter_write_and_shift_reg, 'hff);       // we need to write first to shift in first byte    
+    read68k(`shifter_read_and_shift_reg, d[31:24]);
+    read68k(`shifter_read_and_shift_reg, d[23:16]);
+    read68k(`shifter_read_and_shift_reg, d[15:8]);
+    read68k(`shifter_read_reg,           d[7:0]);            
+    write68k(`select_reg, 'b0000);                      // de-assert CS     
+    if(d != 32'habba1234) $display ("DIV32 mode read failed");
     
     //write 4 bytes @ slowest speed
-    write68k(24'hEE0000, 'b00_0001);    // assert CS 
-    write68k(24'hEC0000, 'h12);    
-    write68k(24'hEC0000, 'h34);    
-    write68k(24'hEC0000, 'h56);    
-    write68k(24'hEC0000, 'h78);    
-    write68k(24'hEE0000, 'b00_0000);    // de-assert CS     
-    
-    
+    write68k(`select_reg,  'b0001);                     // assert CS   
+    write68k(`shifter_write_and_shift_reg, 'h12);    
+    write68k(`shifter_write_and_shift_reg, 'h34);    
+    write68k(`shifter_write_and_shift_reg, 'h56);    
+    write68k(`shifter_write_and_shift_reg, 'h78);    
+    write68k(`select_reg, 'b0000);                      // de-assert CS       
+    if(mosi_data != 32'h12345678) $display ("DIV32 mode write failed");
+      
+    //write 4 bytes @ turbo speed
+    write68k(`control_reg, 'b10);     
+    write68k(`select_reg,  'b0001);                     // assert CS   
+    write68k(`shifter_write_and_shift_reg, 'h9a);    
+    write68k(`shifter_write_and_shift_reg, 'hbc);    
+    write68k(`shifter_write_and_shift_reg, 'hde);    
+    write68k(`shifter_write_and_shift_reg, 'hf0);    
+    write68k(`select_reg, 'b0000);                      // de-assert CS       
+    if(mosi_data != 32'h9abcdef0) $display ("TURBO mode write failed");
+          
+    $display ("Testbench end");
+        
     $finish;
     
     end

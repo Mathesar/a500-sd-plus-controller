@@ -25,7 +25,8 @@ module spi_controller(
     input       _ds,                // data strobe
     input       r_w,                // read / _write
     output      xrdy,               // external ready
-    input       [23:17]adr,         // address
+    input       [23:18]adr_h,       // address (base)
+    input       [11:8]adr_l,        // address (registers)
     inout       [7:0]data,          // data bus
     input       miso,               // SPI MISO
     output      mosi,               // SPI MOSI
@@ -36,7 +37,8 @@ module spi_controller(
     wire [7:0]data_out;
     reg  [1:0]rst_sync;
     reg  command_done;
-    reg  [5:0]ctrl_reg;
+    reg  [1:0]ctrl_reg;
+    reg  [3:0]select_reg;
     reg  [7:0]data_out_latch;
     
     // generate 7M cpu clock
@@ -54,15 +56,13 @@ module spi_controller(
             
     // address decoder, device occupies 256K address block
     localparam device_base = `DEVICE_BASE;
-    assign base_decode = ((device_base[23:18] == adr[23:18]) && !_as) ? 1'b1 : 1'b0;
+    assign base_decode = ((device_base[23:18] == adr_h[23:18]) && !_as) ? 1'b1 : 1'b0;
     
     //command accepted signal
     always @(posedge clk7 or posedge _as)
     begin
         if( _as )
             command_done <= 1'b0; // async clear
-        else if (rst)
-            command_done <= 1'b0; // reset
         else if( base_decode && !_ds && !busy )
             command_done <= 1'b1;
     end
@@ -71,21 +71,31 @@ module spi_controller(
     assign xrdy = ~( base_decode & busy & ~command_done);
     
     // control signals
-    assign enable_data_out = base_decode & r_w & command_done;
-    assign command_strobe  = base_decode & ~_ds & ~busy & ~command_done;
-    assign start_write     = command_strobe & ~adr[17] & ~r_w; 
-    assign start_read      = command_strobe &  adr[17] &  r_w; 
-    assign latch_data_out  = command_strobe &             r_w;
-    assign write_ctrl_reg  = command_strobe &  adr[17] & ~r_w;
+    assign enable_data_out   = base_decode & r_w & command_done;
+    assign command_strobe    = base_decode & ~_ds & ~busy & ~command_done;
+    assign latch_data_out    = command_strobe &  (adr_l[11:9] == 3'h0); 
+    assign start_read        = command_strobe &  (adr_l[11:8] == 4'h1);
+    assign start_write       = command_strobe &  (adr_l[11:8] == 4'h2);      
+    assign write_select_reg  = command_strobe &  (adr_l[11:8] == 4'h3); 
+    assign write_ctrl_reg    = command_strobe &  (adr_l[11:8] == 4'h4); 
        
-    // ctrl register
-    always @(posedge clk7)
+    // select register
+    always @(posedge clk7 or posedge rst)
     begin
         if( rst )
-            ctrl_reg[5:0] <= 6'b0; // reset
-        if( write_ctrl_reg )
-            ctrl_reg[5:0] <= data[5:0];
+            select_reg[3:0] <= 4'b0; // async reset
+        else if( write_select_reg )
+            select_reg[3:0] <= data[3:0];
     end
+
+    // ctrl register
+    always @(posedge clk7 or posedge rst)
+    begin
+        if( rst )
+            ctrl_reg[1:0] <= 2'b0; // async reset
+        else if( write_ctrl_reg )
+            ctrl_reg[1:0] <= data[1:0];
+    end    
         
     // shifter
     shifter SHIFT (
@@ -95,7 +105,7 @@ module spi_controller(
         .start_read  (start_read),       
         .data_in     (data),    
         .data_out    (data_out),  
-        .speed       (ctrl_reg[5:4]),
+        .speed       (ctrl_reg[1:0]),
         .miso        (miso),             
         .mosi        (mosi),       
         .sclk        (sclk),            
@@ -113,6 +123,6 @@ module spi_controller(
     assign data = ( enable_data_out ) ? data_out_latch[7:0] : 8'bz;
     
     // spi chip selects
-    assign _cs[3:0] = ~ctrl_reg[3:0];
+    assign _cs[3:0] = ~select_reg[3:0];
       
 endmodule
