@@ -22,10 +22,13 @@ module shifter(
     input clk,              // system clock
     input rst,              // system reset
     input start_write,      // start write operation
-    input start_read,       // start read operation
+    input start_read,       // start read operation    
     input [7:0] data_in,    // parallel data in
-    output [7:0] data_out,  // parallel data out
+    output [7:0] data_out,  // parallel data out    
     input [1:0]speed,       // speed setting
+    input crc_reset,        // CRC generator reset
+    input crc_source,       // CRC generator input source (0=MOSI, 1=MISO)
+    output [15:0]crc_out,   // CRC output
     input miso,             // SPI MISO
     output mosi,            // SPI MOSI
     output sclk,            // SPI SCLK
@@ -33,6 +36,7 @@ module shifter(
     );
     
     reg [7:0]shifter;
+    reg [15:0]crc16;
     reg [3:0]prescaler;
     reg [4:0]sequencer;
     reg miso_latch;
@@ -50,7 +54,7 @@ module shifter(
             read_mode <= 1'b1;               
     end
     
-    //prescaler
+    // prescaler
     always @(posedge clk)
     begin
         if(start_write || start_read || seq_enable)
@@ -98,14 +102,27 @@ module shifter(
     assign data_out[7:0] = shifter[7:0];
     assign mosi = shifter[7] | read_mode; // force MOSI high in read mode
     
-    //MISO 
+    // CRC generator
+    assign crc16_in = (crc_source) ? (miso_latch ^ crc16[15]) : (shifter[7] ^ crc16[15]);
+    always @(posedge clk or posedge rst)
+    begin
+        if(rst) // async reset
+            crc16[15:0] <= 16'b0000_0000_0000_0000;
+        else if(busy && shift)
+            crc16[15:0] <= { crc16[14:12], (crc16_in^crc16[11]), crc16[10:5], (crc16_in^crc16[4]), crc16[3:0], crc16_in };
+        else if(crc_reset)
+            crc16[15:0] <= 16'b0000_0000_0000_0000;     
+    end
+    assign crc_out = crc16;
+    
+    // MISO 
     always @(negedge clk)
     begin
         if(sample)
             miso_latch <= miso; // not perfect: miso is latched half a clock cycle too early in non-turbo modes, 
     end
         
-    //glitchfree gated turbo SCLK generator
+    // glitchfree gated turbo SCLK generator
     reg [1:0]turbo_sclk = 2'b00; // init for sim
     always @(negedge clk)
     begin
@@ -117,7 +134,7 @@ module shifter(
         turbo_sclk[1] <= turbo_sclk[0];
     end
     
-    //SCLK
+    // SCLK
     assign sclk = (turbo_mode) ? (turbo_sclk[0]^turbo_sclk[1]) : sequencer[0] ; 
     
 endmodule
