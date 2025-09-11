@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-`define SPD_DIV32   2'b00   // SPI speed is clk/32
-`define SPD_DIV8    2'b01   // SPI speed is clk/8
+`define SPD_DIV34   2'b00   // SPI speed is clk/34
+`define SPD_DIV6    2'b01   // SPI speed is clk/6
 `define SPD_TURBO   2'b10   // SPI speed is clk speed
 
 //main shifter
@@ -37,7 +37,7 @@ module shifter(
     
     reg [7:0]shifter;
     reg [15:0]crc16;
-    reg [3:0]prescaler;
+    reg [4:0]prescaler;
     reg [4:0]sequencer;
     reg miso_latch;
     reg read_mode;
@@ -58,16 +58,16 @@ module shifter(
     always @(posedge clk)
     begin
         if(start_write || start_read || seq_enable)
-            prescaler[3:0] <= 4'b0000;
+            prescaler[4:0] <= 5'b0_0000;
         else
-            prescaler[3:0] <= prescaler[3:0] + 1'b1;
+            prescaler[4:0] <= prescaler[4:0] + 1'b1;
     end
     always @(*)
     begin
-        if(speed == `SPD_DIV32)
-            seq_enable = (prescaler == 4'd15) ? 1'b1 : 1'b0 ;
-        else if(speed == `SPD_DIV8)
-            seq_enable = (prescaler == 4'd3) ? 1'b1 : 1'b0 ;
+        if(speed == `SPD_DIV34)
+            seq_enable = prescaler[4];
+        else if(speed == `SPD_DIV6)
+            seq_enable = prescaler[1];
         else
             seq_enable = 1'b0;
     end
@@ -94,7 +94,7 @@ module shifter(
     begin
         if(rst) // async reset
             shifter[7:0] <= 7'b0000_0000;
-        else if(busy && shift)
+        else if(shift)
             shifter[7:0] <= {shifter[6:0],miso_latch};
         else if(start_write)
             shifter[7:0] <= data_in[7:0];          
@@ -108,7 +108,7 @@ module shifter(
     begin
         if(rst) // async reset
             crc16[15:0] <= 16'b0000_0000_0000_0000;
-        else if(busy && shift)
+        else if(shift)
             crc16[15:0] <= { crc16[14:12], (crc16_in^crc16[11]), crc16[10:5], (crc16_in^crc16[4]), crc16[3:0], crc16_in };
         else if(crc_reset)
             crc16[15:0] <= 16'b0000_0000_0000_0000;     

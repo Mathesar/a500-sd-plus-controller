@@ -22,7 +22,9 @@
 `define shifter_write_and_shift_reg     24'hEC0201
 `define select_reg                      24'hEC0301
 `define control_reg                     24'hEC0401
-
+`define crc_source_reg                  24'hEC0501
+`define crc_hi_reg                      24'hEC0601
+`define crc_lo_reg                      24'hEC0701
 
 module spi_controller_TB();
 
@@ -163,9 +165,18 @@ module spi_controller_TB();
     write68k(`shifter_write_and_shift_reg, 'hf0);    
     write68k(`select_reg, 'b0000);                      // de-assert CS       
     if(mosi_data != 32'h9abcdef0) $display ("TURBO mode write failed");
-          
-    $display ("Testbench end");
-        
+    
+    //CRC test when writing
+    write68k(`select_reg,  'b0001);                     // assert CS   
+    write68k(`crc_source_reg, 'b0);                     // reset CRC and set source as MOSI    
+    repeat (512) write68k(`shifter_write_and_shift_reg, 'hff);  // write 512 bytes    
+    read68k(`shifter_read_reg, d[7:0]);                 // dummy read to make sure all data is shifted out
+    read68k(`crc_hi_reg, d[15:8]);                      // read CRC
+    read68k(`crc_lo_reg, d[7:0]);                       // read CRC
+    write68k(`select_reg, 'b0000);                      // de-assert CS     
+    if(d[15:0] != 16'h7fa1) $display ("CRC calculation during write failed");   
+    
+    $display ("Testbench end");        
     $finish;
     
     end
@@ -184,29 +195,30 @@ module spi_controller_TB();
             address[23:0] = address_to_read[23:0];    
                 
             wait_posedge_clk();                 // S2
+            #20;
             _ds = 0;
             _as = 0;
             
-            
             wait_negedge_clk();                 // S3
-                        
-            wait_posedge_clk();                 // S4
-            
+
+            #35;                                    
             while(xrdy == 0)
             begin
-                wait_negedge_clk();             // wait                       
                 wait_posedge_clk();             // wait
+                wait_negedge_clk();             // wait                   
+                #35;
             end
             
-            
+            wait_posedge_clk();                 // S4
+                        
             wait_negedge_clk();                 // S5
                         
             wait_posedge_clk();                 // S6            
             data_to_read = data;       
+                        
+            wait_negedge_clk();                 // S7    
             _as = 1;
-            _ds = 1;
-            
-            wait_negedge_clk();                 // S7           
+            _ds = 1;       
         end
 	endtask
 	
@@ -218,34 +230,39 @@ module spi_controller_TB();
 		begin
             wait_posedge_clk();                 // S0
             r_w = 1;
-            data_drive = data_to_write[15:0];
-            
+                        
             wait_negedge_clk();                 // S1
             address[23:0] = address_to_write[23:0];            
                 
             wait_posedge_clk();                 // S2            
+            r_w = 0; 
+            #20;
             _as = 0; 
-            r_w = 0;           
-                        
+                                   
             wait_negedge_clk();                 // S3
-            _ds = 0;
-                        
-            wait_posedge_clk();                 // S4
-            
+            data_drive = data_to_write[15:0];
+
+            #35;                                    
             while(xrdy == 0)
             begin
-                wait_negedge_clk();             // wait                       
                 wait_posedge_clk();             // wait
+                #20;
+                _ds = 0;
+                wait_negedge_clk();             // wait                   
+                #35;
             end
             
-            
+            wait_posedge_clk();                 // S4
+            #20;
+            _ds = 0;
+                
             wait_negedge_clk();                 // S5
                         
             wait_posedge_clk();                 // S6             
+                        
+            wait_negedge_clk();                 // S7 
             _as = 1;
-            _ds = 1;
-            
-            wait_negedge_clk();                 // S7           
+            _ds = 1;                      
         end
 	endtask
 

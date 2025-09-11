@@ -8,6 +8,9 @@ This is an SPI controller for that Amiga 500 that supports 2 SD-cards plus 2 add
     + [shifter-read-and-shift](#shifter-read-and-shift)
     + [select](#select)
     + [control](#control)
+    + [CRC-source](#crc-source)
+    + [crc-hi](#crc-hi)
+    + [crc-lo](#crc-lo)
   * [Wait states](#wait-states)
 
 ## Registers
@@ -15,13 +18,16 @@ The SPI controller sits in the upper portion of the ZORRO-II IO space
 It occupies a 256K block at address $EC0000..$EFFFFF.\
 The controller has the following registers:
 
-| **address** | **R/W** | **Name**               |
-| ----------- | ------- | ---------------------- |
+| **address** | **R/W** | **Name**                |
+| ----------- | ------- | ----------------------- |
 | $EC0001     | R       | shifter-read            |
 | $EC0101     | R       | shifter-read-and-shift  |
 | $EC0201     | W       | shifter-write-and-shift |
-| $EC0301     | W       | select                 |
-| $EC0401     | W       | control                |
+| $EC0301     | W       | select                  |
+| $EC0401     | W       | control                 |
+| $EC0501     | W       | crc-source              |
+| $EC0601     | R       | crc-hi                  |
+| $EC0701     | R       | crc-lo                  |
 
 ### shifter-read
 This register returns the current content the SPI shift register. 
@@ -35,7 +41,7 @@ This will cause the shifter to shift in the first byte while MOSI is forced high
 ### shifter-write-and-shift
 This register writes data to the SPI shift register. This register is write-only.
 Upon writing to this register, data is loaded into the shift register and then shifted out of the MOSI pin. Data is shifted out MSB first. At the same time, data from the MISO pin is shifted into the shift register. 
-To write one or more bytes to an SPI device, software can simply write one or more bytes successively to the shifter-write-and-shift register.
+To write one or more bytes to an SPI device, software can simply write one or more bytes successively to the shifter-write-and-shift register. 
 
 ### shifter-read-and-shift
 This register provides an alternate way of reading the contents of the SPI shift register.
@@ -43,10 +49,10 @@ This register is read-only. Upon reading this register, the current contents of 
 The shifter-read-and-shift register allows reading large chunks of data from the SD-card or any other SPI device with minimal overhead. 
 
 For example, to read 512 bytes of data:
-1. Write 0xff to the shifter-write-and-shift register. 
+1. Write 0xff to the `shifter-write-and-shift` register. 
 This will cause the shifter to shift in the first byte while MOSI is forced high.
-2. Read the shifter-read-and-shift register 511 times.
-3. Finally, read the last byte using the shifter-read register. This is needed to prevent reading 1 byte too many as reading from the shifter-read-and-shift register will always trigger a next shift sequence.
+2. Read the `shifter-read-and-shift` register 511 times.
+3. Finally, read the last byte using the `shifter-read` register. This is needed to prevent reading 1 byte too many as reading from the `shifter-read-and-shift` register will always trigger a next shift sequence.
 
 ### select
 This register controls the chip select signals. This register is write-only.
@@ -64,9 +70,26 @@ Currently, only the SPI clock speed can be set.
 
 | **value** | **clock speed** |
 | --------- | --------------- |
-| $00       | ~ 223 kHz       |
-| $01       | ~ 890 kHz       |
+| $00       | ~ 209 kHz       |
+| $01       | ~ 1.19 MHz      |
 | $10       | ~ 7.12 MHz      |
+
+### crc-source
+This register selects MOSI or MISO as the CRC generator input. This register is write-only. This register is set to 0x00 after reset.
+Changing the source (writing to this register) also resets the CRC generator to 0x0000.
+
+| **value** | **source**                  |
+| --------- | --------------------------- |
+| $00       | MOSI (compute CRC on write) |
+| $01       | MISO (compute CRC on read)  |
+
+### crc-hi
+This register returns the high byte of the CRC register. 
+This register is read-only.
+
+### crc-lo
+This register returns the low byte of the CRC register. 
+This register is read-only.
 
 ## Wait states
 The registers of the SPI controller can only be accessed when the shifter is not shifting ("busy"). There is no provision to check by software whether the shifter is busy or not. Instead, the controller will insert wait states when attempting to access any register while the shifter is busy. 
