@@ -43,8 +43,15 @@ module spi_controller(
     
     wire [15:0]crc_out;
     
-    // generate 7M cpu clock
+	// generate 7M cpu clock
+`ifdef ALTERA_RESERVED_QIS   	 
+ 	global CLK_BUF (
+        .in             (cck ~^ cckq), 
+        .out            (clk7)
+    ); 
+`else
     assign clk7 = cck ~^ cckq;
+`endif
     
     // reset synchronizer
     always @(posedge clk7 or negedge _reset)
@@ -54,7 +61,16 @@ module spi_controller(
         else
             rst_sync[1:0] <= {rst_sync[0],1'b0};
     end
-    assign rst = rst_sync[1];
+
+    // reset buffer
+`ifdef ALTERA_RESERVED_QIS 	 
+	 global RST_BUF (
+        .in             (rst_sync[1]),
+        .out            (rst)
+	 ); 
+`else
+	 assign rst = rst_sync[1];
+`endif
             
     // address decoder, device occupies 256K address block
     localparam device_base = `DEVICE_BASE;
