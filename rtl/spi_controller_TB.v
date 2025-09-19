@@ -176,7 +176,9 @@ module spi_controller_TB();
     write68k(`select_reg, 'b0000);                      // de-assert CS     
     if(d[15:0] != 16'h7fa1) $display ("CRC calculation during write failed");   
     
-    $display ("Testbench end");        
+    $display ("Testbench end"); 
+    
+    #200;       
     $finish;
     
     end

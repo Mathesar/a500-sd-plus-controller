@@ -23,7 +23,7 @@ module spi_controller(
     input       _as,                // address strobe
     input       _ds,                // data strobe
     input       r_w,                // read / _write
-    output      xrdy,               // external ready
+    output reg  xrdy,               // external ready
     input       [23:18]adr_h,       // address (base)
     input       [11:8]adr_l,        // address (registers)
     inout       [7:0]data,          // data bus
@@ -33,133 +33,158 @@ module spi_controller(
     output      [3:0]_cs            // SPI CHIP SELECTS
     );
     
-    wire [7:0]data_out;
-    reg  [1:0]rst_sync;
-    reg  command_done;
-    reg  [1:0]ctrl_reg;
-    reg  [3:0]select_reg;
-    reg  crc_source;
-    reg  [7:0]data_out_latch;
+    localparam device_base = `DEVICE_BASE;
     
+    reg [7:0]data_out;
+    wire [7:0]data_in;
+    wire [3:0]register_address;
+    wire [7:0]shift_out;
     wire [15:0]crc_out;
     
-	// generate 7M cpu clock
+    reg  reg_enable_ff;
+    reg  [1:0]ctrl_reg;
+    reg  [3:0]select_reg;
+    reg  crc_source_reg;
+    
+    reg  enable_data_out;
+        
+	// generate local clock
 `ifdef ALTERA_RESERVED_QIS   	 
  	global CLK_BUF (
         .in             (cck ~^ cckq), 
-        .out            (clk7)
+        .out            (clk)
     ); 
 `else
-    assign clk7 = cck ~^ cckq;
+    assign clk = cck ~^ cckq;
 `endif
-    
-    // reset synchronizer
-    always @(posedge clk7 or negedge _reset)
-    begin
-        if (!_reset)
-            rst_sync[1:0] <= 2'b11; //async preset
-        else
-            rst_sync[1:0] <= {rst_sync[0],1'b0};
-    end
 
-    // reset buffer
-`ifdef ALTERA_RESERVED_QIS 	 
-	 global RST_BUF (
-        .in             (rst_sync[1]),
-        .out            (rst)
-	 ); 
-`else
-	 assign rst = rst_sync[1];
-`endif
-            
-    // address decoder, device occupies 256K address block
-    localparam device_base = `DEVICE_BASE;
-    assign base_decode = ((device_base[23:18] == adr_h[23:18]) && !_as) ? 1'b1 : 1'b0;
+    // device occupies 256K address block   
+    assign base_decode_async = (device_base[23:18] == adr_h[23:18]) & ~_as;
     
-    //command accepted signal
-    always @(posedge clk7 or posedge _as)
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+    
+    // data_out multiplexer
+    always @(*)
+    begin
+        if( adr_l[11:9] == 3'h0 )
+            data_out = shift_out;
+        else if ( adr_l[11:8] == 4'h6 )
+            data_out = crc_out[15:8];
+        else if ( adr_l[11:8] == 4'h7 )
+            data_out = crc_out[7:0];
+        else
+            data_out = 8'bx;
+    end
+    
+    // reading of registers is asynchronous
+    // we latch enable_data_out when all the 
+    // address and control lines are stable and _ds goes low
+    always @(negedge _ds or posedge _as)
     begin
         if(_as)
-            command_done <= 1'b0; // async clear
-        else if(base_decode && !_ds && !busy)
-            command_done <= 1'b1;
+            enable_data_out <= 1'b0;
+        else if(base_decode_async && r_w)
+            enable_data_out <= 1'b1;   
+    end
+        
+    // data bus tri-state control
+    assign data = (enable_data_out) ? data_out : 8'bz;
+   
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // xrdy signal.
+    // When the SPI controller is busy xrdy goes low 
+    // so that Gary will introduce waitstates
+    always @(negedge _as or negedge busy)
+    begin
+        if(!busy)
+            xrdy <= 1'b1; 
+        else if(base_decode_async && busy)
+            xrdy <= 1'b0;            
     end
     
-    // wait state control
-    assign xrdy = ~(base_decode & busy & ~command_done);
-    
-    // control signals
-    assign enable_data_out      = base_decode & r_w & command_done;
-    assign command_strobe       = base_decode & ~_ds & ~busy & ~command_done;
-    assign latch_data_out       = command_strobe &  (adr_l[11:9] == 3'h0); 
-    assign start_read           = command_strobe &  (adr_l[11:8] == 4'h1);
-    assign start_write          = command_strobe &  (adr_l[11:8] == 4'h2);      
-    assign write_select_reg     = command_strobe &  (adr_l[11:8] == 4'h3); 
-    assign write_ctrl_reg       = command_strobe &  (adr_l[11:8] == 4'h4); 
-    assign write_crc_source_reg = command_strobe &  (adr_l[11:8] == 4'h5); 
-    assign latch_crc_hi         = command_strobe &  (adr_l[11:8] == 4'h6); 
-    assign latch_crc_lo         = command_strobe &  (adr_l[11:8] == 4'h7); 
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+                        
+    // synchronize asynchronous input signals to local clock
+    sync_68k_bus SYNC_68K (
+        .clk                ( clk ),
+        ._reset_in          ( _reset ),
+        .rst_out            ( rst ),
+        .base_decode_in     ( base_decode_async ), 
+        .base_decode_out    ( base_decode ),
+        ._ds_in             ( _ds ),
+        ._ds_out            ( _data_strobe ),
+        .adr_l_in           ( adr_l[11:8] ),
+        .adr_l_out          ( register_address[3:0] ),
+        .data_in            ( data ),
+        .data_out           ( data_in )
+    );
+            
+    // generate register enable signal
+    always @(posedge clk or posedge rst)
+    begin
+        if(rst)
+            reg_enable_ff <= 1'b0;
+        else
+            reg_enable_ff <= reg_enable;
+    end    
+    assign reg_enable = ( base_decode && !_data_strobe && !busy &&  !reg_enable_ff) ? 1'b1 : 1'b0;
+                
+    // decode register addresses to generate control signals
+    assign start_read           = reg_enable & (register_address[3:0] == 4'h1);
+    assign start_write          = reg_enable & (register_address[3:0] == 4'h2);          
+    assign write_select_reg     = reg_enable & (register_address[3:0] == 4'h3); 
+    assign write_ctrl_reg       = reg_enable & (register_address[3:0] == 4'h4); 
+    assign write_crc_source_reg = reg_enable & (register_address[3:0] == 4'h5); 
        
     // select register
-    always @(posedge clk7 or posedge rst)
+    always @(posedge clk or posedge rst)
     begin
         if(rst)
             select_reg[3:0] <= 4'b0; // async reset
         else if(write_select_reg)
-            select_reg[3:0] <= data[3:0];
+            select_reg[3:0] <= data_in[3:0];
     end
 
     // ctrl register
-    always @(posedge clk7 or posedge rst)
+    always @(posedge clk or posedge rst)
     begin
         if(rst)
             ctrl_reg[1:0] <= 2'b0; // async reset
         else if(write_ctrl_reg)
-            ctrl_reg[1:0] <= data[1:0];
+            ctrl_reg[1:0] <= data_in[1:0];
     end  
     
     // crc_source register
-    always @(posedge clk7 or posedge rst)
+    always @(posedge clk or posedge rst)
     begin
         if(rst)
-            crc_source <= 1'b0; // async reset
+            crc_source_reg <= 1'b0; // async reset
         else if(write_crc_source_reg)
-            crc_source <= data[0];
+            crc_source_reg <= data_in[0];
     end  
-            
+                
     // shifter
     shifter SHIFT (
-        .clk            (clk7),             
-        .rst            (rst),              
-        .start_write    (start_write),      
-        .start_read     (start_read),       
-        .data_in        (data),    
-        .data_out       (data_out),  
-        .speed          (ctrl_reg[1:0]),
-        .crc_reset      (write_crc_source_reg),        
-        .crc_source     (crc_source),       
-        .crc_out        (crc_out),  
-        .miso           (miso),             
-        .mosi           (mosi),       
-        .sclk           (sclk),            
-        .busy           (busy)            
+        .clk            ( clk ),             
+        .rst            ( rst ),              
+        .start_write    ( start_write ),      
+        .start_read     ( start_read ),       
+        .data_in        ( data_in ),    
+        .data_out       ( shift_out ),  
+        .speed          ( ctrl_reg[1:0] ),
+        .crc_reset      ( write_crc_source_reg ),        
+        .crc_source     ( crc_source_reg ),       
+        .crc_out        ( crc_out ),  
+        .miso           ( miso ),             
+        .mosi           ( mosi ),       
+        .sclk           ( sclk ),            
+        .busy           ( busy )            
     );
-    
-    // data out latch
-    always @(posedge clk7)
-    begin
-        if(latch_data_out)
-            data_out_latch[7:0] <= data_out[7:0];
-        else if(latch_crc_hi)
-            data_out_latch[7:0] <= crc_out[15:8];
-        else if(latch_crc_lo)
-            data_out_latch[7:0] <= crc_out[7:0];
-    end
-    
-    // data bus tri-state control
-    assign data = (enable_data_out) ? data_out_latch[7:0] : 8'bz;
-    
+     
     // spi chip selects
     assign _cs[3:0] = ~select_reg[3:0];
       
 endmodule
+
+

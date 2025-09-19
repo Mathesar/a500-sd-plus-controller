@@ -24,7 +24,7 @@ module shifter(
     input start_write,      // start write operation
     input start_read,       // start read operation    
     input [7:0] data_in,    // parallel data in
-    output [7:0] data_out,  // parallel data out    
+    output reg [7:0] data_out,  // parallel data out    
     input [1:0]speed,       // speed setting
     input crc_reset,        // CRC generator reset
     input crc_source,       // CRC generator input source (0=MOSI, 1=MISO)
@@ -99,7 +99,11 @@ module shifter(
         else if(start_write)
             shifter[7:0] <= data_in[7:0];          
     end
-    assign data_out[7:0] = shifter[7:0];
+    
+    always @(posedge clk)
+        if( (sequencer[3:1] == 3'b111) && shift ) 
+            data_out[7:0] <= {shifter[6:0],miso_latch};
+    
     assign mosi = shifter[7] | read_mode; // force MOSI high in read mode
     
     // CRC generator
