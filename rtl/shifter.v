@@ -13,26 +13,26 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-`define SPD_DIV34   2'b00   // SPI speed is clk/34
-`define SPD_DIV6    2'b01   // SPI speed is clk/6
-`define SPD_TURBO   2'b10   // SPI speed is clk speed
+`define SPD_DIV34   2'b00       // SPI speed is clk/34
+`define SPD_DIV6    2'b01       // SPI speed is clk/6
+`define SPD_TURBO   2'b10       // SPI speed is clk speed
 
 //main shifter
 module shifter(
-    input clk,              // system clock
-    input rst,              // system reset
-    input start_write,      // start write operation
-    input start_read,       // start read operation    
-    input [7:0] data_in,    // parallel data in
-    output reg [7:0] data_out,  // parallel data out    
-    input [1:0]speed,       // speed setting
-    input crc_reset,        // CRC generator reset
-    input crc_source,       // CRC generator input source (0=MOSI, 1=MISO)
-    output [15:0]crc_out,   // CRC output
-    input miso,             // SPI MISO
-    output mosi,            // SPI MOSI
-    output sclk,            // SPI SCLK
-    output busy             // busy status
+    input clk,                  // system clock
+    input rst,                  // system reset
+    input start_write,          // start write operation
+    input start_read,           // start read operation    
+    input [7:0]shift_in,        // parallel data in
+    output reg [7:0]shift_out,  // parallel data out    
+    input [1:0]speed,           // speed setting
+    input crc_reset,            // CRC generator reset
+    input crc_source,           // CRC generator input source (0=MOSI, 1=MISO)
+    output [15:0]crc_out,       // CRC output
+    input miso,                 // SPI MISO
+    output mosi,                // SPI MOSI
+    output sclk,                // SPI SCLK
+    output busy                 // busy status
     );
     
     reg [7:0]shifter;
@@ -42,6 +42,7 @@ module shifter(
     reg miso_latch;
     reg read_mode;
     reg seq_enable;
+    reg seq_tc;
     
     // mode
     always @(posedge clk or posedge rst)
@@ -97,12 +98,12 @@ module shifter(
         else if(shift)
             shifter[7:0] <= {shifter[6:0],miso_latch};
         else if(start_write)
-            shifter[7:0] <= data_in[7:0];          
+            shifter[7:0] <= shift_in[7:0];          
     end
     
     always @(posedge clk)
         if( (sequencer[3:1] == 3'b111) && shift ) 
-            data_out[7:0] <= {shifter[6:0],miso_latch};
+            shift_out[7:0] <= {shifter[6:0],miso_latch};
     
     assign mosi = shifter[7] | read_mode; // force MOSI high in read mode
     

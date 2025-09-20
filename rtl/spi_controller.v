@@ -47,8 +47,16 @@ module spi_controller(
     reg  crc_source_reg;
     
     reg  enable_data_out;
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // base address decoder
+    // device occupies 256K address block   
+    assign base_decode_async = (device_base[23:18] == adr_h[23:18]) & ~_as;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
         
-	// generate local clock
+	// generate shifter clock
 `ifdef ALTERA_RESERVED_QIS   	 
  	global CLK_BUF (
         .in             (cck ~^ cckq), 
@@ -57,9 +65,6 @@ module spi_controller(
 `else
     assign clk = cck ~^ cckq;
 `endif
-
-    // device occupies 256K address block   
-    assign base_decode_async = (device_base[23:18] == adr_h[23:18]) & ~_as;
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////
     
@@ -77,8 +82,8 @@ module spi_controller(
     end
     
     // reading of registers is asynchronous
-    // we latch enable_data_out when all the 
-    // address and control lines are stable and _ds goes low
+    // address and control lines are guaranteed 
+    // stable when _ds goes low
     always @(negedge _ds or posedge _as)
     begin
         if(_as)
@@ -105,7 +110,7 @@ module spi_controller(
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////
                         
-    // synchronize asynchronous input signals to local clock
+    // synchronize asynchronous input signals to shifter clock
     sync_68k_bus SYNC_68K (
         .clk                ( clk ),
         ._reset_in          ( _reset ),
@@ -170,8 +175,8 @@ module spi_controller(
         .rst            ( rst ),              
         .start_write    ( start_write ),      
         .start_read     ( start_read ),       
-        .data_in        ( data_in ),    
-        .data_out       ( shift_out ),  
+        .shift_in       ( data_in ),    
+        .shift_out      ( shift_out ),  
         .speed          ( ctrl_reg[1:0] ),
         .crc_reset      ( write_crc_source_reg ),        
         .crc_source     ( crc_source_reg ),       
@@ -186,5 +191,3 @@ module spi_controller(
     assign _cs[3:0] = ~select_reg[3:0];
       
 endmodule
-
-
