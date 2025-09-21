@@ -19,6 +19,7 @@
 module spi_controller(
     input       cck,                // color clock
     input       cckq,               // quadrature clock
+    input       cdac,               // cdac
     input       _reset,             // reset
     input       _as,                // address strobe
     input       _ds,                // data strobe
@@ -57,13 +58,14 @@ module spi_controller(
     //////////////////////////////////////////////////////////////////////////////////////////////////////
         
 	// generate shifter clock
+	// (approx 14MHz)
 `ifdef ALTERA_RESERVED_QIS   	 
  	global CLK_BUF (
-        .in             (cck ~^ cckq), 
+        .in             ((cck ~^ cckq) ~^ cdac), 
         .out            (clk)
     ); 
 `else
-    assign clk = cck ~^ cckq;
+    assign clk = (cck ~^ cckq) ~^ cdac;
 `endif
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -33,23 +33,22 @@ module spi_controller_TB();
     reg [23:0]address;
     reg cck;
     reg cckq;
-    reg clk;
+    reg cdac;
+    reg cpu_clk;
     reg r_w;
     reg _rst;
     reg _as;
     reg _ds;
     reg [31:0] miso;
     reg [31:0] mosi_data;
-    
-    
+        
     // outputs from DUT
     wire [15:0]data;                    // inout   
     wire xrdy;   
     wire mosi;
     wire sclk;
     wire [3:0]_cs;
-    
-     
+         
     // data bus
     assign data = data_drive;
     
@@ -58,7 +57,8 @@ module spi_controller_TB();
 
     spi_controller dut (
         .cck(cck), 
-        .cckq(cckq), 
+        .cckq(cckq),
+        .cdac(cdac), 
         ._reset(_rst),
         ._as(_as),
         ._ds(_ds),
@@ -73,27 +73,37 @@ module spi_controller_TB();
         ._cs(_cs)
     );
     
-    // clocks
+    // CCK and CCKQ clocks
     initial begin
         cck = 1'b0;
         cckq = 1'b0;
-        clk = 1'b1;
+        cpu_clk = 1'b1;
 		forever begin
-		  #70 
+		  #70; 
 		  cck  = 1;
-		  clk  = 0;
+		  cpu_clk  = 0;
 		  #70;
 		  cckq = 1;
-		  clk  = 1;
+		  cpu_clk  = 1;
 		  #70
 		  cck  = 0;
-		  clk  = 0;
+		  cpu_clk  = 0;
 		  #70;
 		  cckq = 0;
-		  clk  = 1;   
+		  cpu_clk  = 1;   
         end
     end
     
+    // CDAC
+    initial begin
+        cdac = 1'b1;
+        #35;
+        forever begin
+            cdac = ~cdac;
+            #70;
+        end    
+    end
+        
     // miso shifter
     initial begin
         forever begin
@@ -170,7 +180,7 @@ module spi_controller_TB();
     write68k(`select_reg,  'b0001);                     // assert CS   
     write68k(`crc_source_reg, 'b0);                     // reset CRC and set source as MOSI    
     repeat (512) write68k(`shifter_write_and_shift_reg, 'hff);  // write 512 bytes    
-    read68k(`shifter_read_reg, d[7:0]);                 // dummy read to make sure all data is shifted out
+    //read68k(`shifter_read_reg, d[7:0]);                 // dummy read to make sure all data is shifted out
     read68k(`crc_hi_reg, d[15:8]);                      // read CRC
     read68k(`crc_lo_reg, d[7:0]);                       // read CRC
     write68k(`select_reg, 'b0000);                      // de-assert CS     
@@ -270,14 +280,14 @@ module spi_controller_TB();
 
 	task wait_posedge_clk ();
         begin
-            @(posedge clk);
+            @(posedge cpu_clk);
             #0.1;
         end 
 	endtask
 	
 	task wait_negedge_clk ();
         begin
-            @(negedge clk);
+            @(negedge cpu_clk);
             #0.1;
         end 
 	endtask

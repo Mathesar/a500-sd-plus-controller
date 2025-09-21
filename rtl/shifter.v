@@ -13,9 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-`define SPD_DIV34   2'b00       // SPI speed is clk/34
-`define SPD_DIV6    2'b01       // SPI speed is clk/6
-`define SPD_TURBO   2'b10       // SPI speed is clk speed
+`define SPD_DIV66   2'b00       // SPI speed is clk/66
+`define SPD_DIV10   2'b01       // SPI speed is clk/10
+`define SPD_DIV2    2'b10       // SPI speed is clk/2 (max)
 
 //main shifter
 module shifter(
@@ -37,76 +37,62 @@ module shifter(
     
     reg [7:0]shifter;
     reg [15:0]crc16;
-    reg [4:0]prescaler;
-    reg [4:0]sequencer;
+    reg [5:0]prescaler;
+    reg [5:0]sequencer;
     reg miso_latch;
-    reg read_mode;
     reg seq_enable;
-    reg seq_tc;
-    
-    // mode
-    always @(posedge clk or posedge rst)
-    begin
-        if(rst) // async reset
-            read_mode <= 1'b0;
-        else if(start_write)
-            read_mode <= 1'b0;
-        else if(start_read)
-            read_mode <= 1'b1;               
-    end
-    
+      
     // prescaler
     always @(posedge clk)
     begin
         if(start_write || start_read || seq_enable)
-            prescaler[4:0] <= 5'b0_0000;
+            prescaler[5:0] <= 6'b00_0000;
         else
-            prescaler[4:0] <= prescaler[4:0] + 1'b1;
+            prescaler[5:0] <= prescaler[5:0] + 1'b1;
     end
     always @(*)
     begin
-        if(speed == `SPD_DIV34)
-            seq_enable = prescaler[4];
-        else if(speed == `SPD_DIV6)
-            seq_enable = prescaler[1];
+        if(speed == `SPD_DIV66)
+            seq_enable = prescaler[5];
+        else if(speed == `SPD_DIV10)
+            seq_enable = prescaler[2];
         else
-            seq_enable = 1'b0;
+            seq_enable = 1'b1;
     end
-    wire turbo_mode = (speed == `SPD_TURBO) ? 1'b1 : 1'b0 ;
                        
     // sequencer
     always @(posedge clk or posedge rst)
     begin
         if(rst) // async reset
             sequencer[4:0] <= 5'b0_0000;
-        else if(busy && turbo_mode)
-            sequencer[4:1] <= sequencer[4:1] + 1'b1;
         else if(busy && seq_enable)
             sequencer[4:0] <= sequencer[4:0] + 1'b1;
         else if(start_write || start_read)
             sequencer[4:0] <= 5'b1_0000;
     end
-    assign busy   = sequencer[4];
-    assign shift  = busy & ((seq_enable &  sequencer[0]) | turbo_mode);
-    assign sample = busy & ((seq_enable & ~sequencer[0]) | turbo_mode);
-        
-    // main shifter and MOSI
+    assign busy        = sequencer[4];
+    assign shift       = busy & (seq_enable &  sequencer[0]);
+    assign shift_final = busy & (sequencer[3:1] == 3'b111) & shift ;
+    assign sample      = busy & (seq_enable & ~sequencer[0]);
+            
+    // main shifter
     always @(posedge clk or posedge rst)
     begin
         if(rst) // async reset
-            shifter[7:0] <= 7'b0000_0000;
-        else if(shift)
+            shifter[7:0] <= 8'b0000_0000;
+        else if(shift && !shift_final)
             shifter[7:0] <= {shifter[6:0],miso_latch};
         else if(start_write)
             shifter[7:0] <= shift_in[7:0];          
+        else if(start_read)
+            shifter[7:0] <= 8'b1111_1111;          
     end
     
+    // shifter parallel out buffer
     always @(posedge clk)
-        if( (sequencer[3:1] == 3'b111) && shift ) 
+        if(shift_final) 
             shift_out[7:0] <= {shifter[6:0],miso_latch};
-    
-    assign mosi = shifter[7] | read_mode; // force MOSI high in read mode
-    
+            
     // CRC generator
     assign crc16_in = (crc_source) ? (miso_latch ^ crc16[15]) : (shifter[7] ^ crc16[15]);
     always @(posedge clk or posedge rst)
@@ -121,25 +107,16 @@ module shifter(
     assign crc_out = crc16;
     
     // MISO 
-    always @(negedge clk)
-    begin
-        if(sample)
-            miso_latch <= miso; // not perfect: miso is latched half a clock cycle too early in non-turbo modes, 
-    end
-        
-    // glitchfree gated turbo SCLK generator
-    reg [1:0]turbo_sclk = 2'b00; // init for sim
-    always @(negedge clk)
-    begin
-        if(busy)
-            turbo_sclk[0] <= ~turbo_sclk[0];
-    end
     always @(posedge clk)
     begin
-        turbo_sclk[1] <= turbo_sclk[0];
+        if(sample)
+            miso_latch <= miso;  
     end
-    
+       
     // SCLK
-    assign sclk = (turbo_mode) ? (turbo_sclk[0]^turbo_sclk[1]) : sequencer[0] ; 
-    
+    assign sclk = sequencer[0]; 
+
+    // MOSI
+    assign mosi = shifter[7]; 
+     
 endmodule
