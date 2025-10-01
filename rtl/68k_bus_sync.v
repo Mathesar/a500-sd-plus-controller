@@ -14,17 +14,17 @@
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
-// 68k bus synchronizer
-module sync_68k_bus (
+// CIA bus synchronizer
+module sync_cia_bus (
     input       clk,                // destination clock
     input       _reset_in,          // reset
     output      rst_out,
-    input       base_decode_in,     // base address strobe
-    output      base_decode_out,
-    input       _ds_in,             // data strobe
-    output      _ds_out,
-    input       [11:8]adr_l_in,     // register addresses
-    output      [11:8]adr_l_out, 
+    input       reg_decode_in,      // register address strobe
+    output      reg_decode_out,
+    input       _cs_in,             // chip select
+    output      _cs_out,
+    input       e_in,               // E clock
+    output      e_out,
     input       [7:0]data_in,       // databus
     output      [7:0]data_out      
     );
@@ -51,19 +51,14 @@ module sync_68k_bus (
         assign rst_out = rst_ff[1];
     `endif
     
-    // base decode
-    sync SYNC_BASE ( clk, base_decode_in, base_decode_out  );
+    // register decode
+    sync SYNC_RS ( clk, reg_decode_in, reg_decode_out );
     
-    // data strobe
-    sync SYNC_DS   ( clk, _ds_in, _ds_out );
+    // chip select
+    sync SYNC_CS ( clk, _cs_in, _cs_out );
 
-    // address bus
-	generate
-        for (i = 8; i <= 11; i = i + 1) 
-        begin : gen_adr
-	       sync SYNC_ADR (clk, adr_l_in[i], adr_l_out[i]); 
-        end
-	endgenerate
+    // E clock
+    sync SYNC_E ( clk, e_in, e_out );
 	
     // data bus
     generate

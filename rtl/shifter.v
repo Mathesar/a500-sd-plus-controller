@@ -38,7 +38,7 @@ module shifter(
     reg [7:0]shifter;
     reg [15:0]crc16;
     reg [5:0]prescaler;
-    reg [5:0]sequencer;
+    reg [4:0]sequencer;
     reg miso_latch;
     reg seq_enable;
       

@@ -13,47 +13,47 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-// device base address
-`define  DEVICE_BASE        24'hEC0000
+// register address
+`define  REGISTER_ADDRESS 4'hb
 
 module spi_controller(
     input       cck,                // color clock
     input       cckq,               // quadrature clock
     input       cdac,               // cdac
     input       _reset,             // reset
-    input       _as,                // address strobe
-    input       _ds,                // data strobe
     input       r_w,                // read / _write
-    output reg  xrdy,               // external ready
-    input       [23:18]adr_h,       // address (base)
-    input       [11:8]adr_l,        // address (registers)
+    input       _cs,                // chip select
+    input       e,                  // E clock
+    input       [3:0]rs,            // register address    
     inout       [7:0]data,          // data bus
     input       miso,               // SPI MISO
     output      mosi,               // SPI MOSI
     output      sclk,               // SPI SCLK
-    output      [3:0]_cs            // SPI CHIP SELECTS
+    output      [3:0]_ss            // SPI SLAVE SELECTS
     );
+   
+    reg  [7:0]data_out;
+    reg  [7:0]next_data_out;
+    reg  [1:0]ctrl_reg;
+    reg  [1:0]next_ctrl_reg;
+    reg  [3:0]select_reg;
+    reg  [3:0]next_select_reg;
+    reg  crc_source_reg;
+    reg  next_crc_source_reg;
+    reg  [2:0]state;
+    reg  [2:0]next_state;
     
-    localparam device_base = `DEVICE_BASE;
-    
-    reg [7:0]data_out;
     wire [7:0]data_in;
-    wire [3:0]register_address;
     wire [7:0]shift_out;
     wire [15:0]crc_out;
-    
-    reg  reg_enable_ff;
-    reg  [1:0]ctrl_reg;
-    reg  [3:0]select_reg;
-    reg  crc_source_reg;
-    
+        
+    reg  start_read;
+    reg  start_write; 
+    reg  crc_reset;
+    wire select,cycle;
+    reg  select_latch;
+  
     reg  enable_data_out;
-    
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // base address decoder
-    // device occupies 256K address block   
-    assign base_decode_async = (device_base[23:18] == adr_h[23:18]) & ~_as;
 
     //////////////////////////////////////////////////////////////////////////////////////////////////////
         
@@ -69,108 +69,214 @@ module spi_controller(
 `endif
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////
-    
-    // data_out multiplexer
-    always @(*)
-    begin
-        if( adr_l[11:9] == 3'h0 )
-            data_out = shift_out;
-        else if ( adr_l[11:8] == 4'h6 )
-            data_out = crc_out[15:8];
-        else if ( adr_l[11:8] == 4'h7 )
-            data_out = crc_out[7:0];
-        else
-            data_out = 8'bx;
-    end
-    
+     
+    assign reg_decode_async = (rs[3:0]==`REGISTER_ADDRESS) ? 1'b1 : 1'b0;
+
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+
     // reading of registers is asynchronous
     // address and control lines are guaranteed 
-    // stable when _ds goes low
-    always @(negedge _ds or posedge _as)
+    // stable when _cs goes low
+    always @(posedge e or posedge _cs)
     begin
-        if(_as)
+        if(_cs)
             enable_data_out <= 1'b0;
-        else if(base_decode_async && r_w)
+        else if( reg_decode_async && r_w && !_cs)
             enable_data_out <= 1'b1;   
     end
         
     // data bus tri-state control
     assign data = (enable_data_out) ? data_out : 8'bz;
-   
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // xrdy signal.
-    // When the SPI controller is busy xrdy goes low 
-    // so that Gary will introduce waitstates
-    always @(negedge _as or negedge busy)
-    begin
-        if(!busy)
-            xrdy <= 1'b1; 
-        else if(base_decode_async && busy)
-            xrdy <= 1'b0;            
-    end
-    
+        
     //////////////////////////////////////////////////////////////////////////////////////////////////////
                         
     // synchronize asynchronous input signals to shifter clock
-    sync_68k_bus SYNC_68K (
+    sync_cia_bus SYNC_BUS (
         .clk                ( clk ),
         ._reset_in          ( _reset ),
         .rst_out            ( rst ),
-        .base_decode_in     ( base_decode_async ), 
-        .base_decode_out    ( base_decode ),
-        ._ds_in             ( _ds ),
-        ._ds_out            ( _data_strobe ),
-        .adr_l_in           ( adr_l[11:8] ),
-        .adr_l_out          ( register_address[3:0] ),
+        .reg_decode_in      ( reg_decode_async ), 
+        .reg_decode_out     ( reg_decode ),
+        ._cs_in             ( _cs ),
+        ._cs_out            ( _chip_select ),
+        .e_in               ( e ),
+        .e_out              ( e_clk ),
         .data_in            ( data ),
         .data_out           ( data_in )
     );
-            
-    // generate register enable signal
-    always @(posedge clk or posedge rst)
-    begin
-        if(rst)
-            reg_enable_ff <= 1'b0;
-        else
-            reg_enable_ff <= reg_enable;
-    end    
-    assign reg_enable = ( base_decode && !_data_strobe && !busy &&  !reg_enable_ff) ? 1'b1 : 1'b0;
-                
-    // decode register addresses to generate control signals
-    assign start_read           = reg_enable & (register_address[3:0] == 4'h1);
-    assign start_write          = reg_enable & (register_address[3:0] == 4'h2);          
-    assign write_select_reg     = reg_enable & (register_address[3:0] == 4'h3); 
-    assign write_ctrl_reg       = reg_enable & (register_address[3:0] == 4'h4); 
-    assign write_crc_source_reg = reg_enable & (register_address[3:0] == 4'h5); 
        
-    // select register
+    // detect start of access cycle
+    assign select = (reg_decode) & e_clk & ~_chip_select;
     always @(posedge clk or posedge rst)
     begin
         if(rst)
-            select_reg[3:0] <= 4'b0; // async reset
-        else if(write_select_reg)
-            select_reg[3:0] <= data_in[3:0];
+            select_latch <= 1'b0; // async reset
+        else
+            select_latch <= select;
     end
-
-    // ctrl register
-    always @(posedge clk or posedge rst)
-    begin
-        if(rst)
-            ctrl_reg[1:0] <= 2'b0; // async reset
-        else if(write_ctrl_reg)
-            ctrl_reg[1:0] <= data_in[1:0];
-    end  
+    assign cycle = select & ~select_latch;
     
-    // crc_source register
+    // states    
+    localparam IDLE=0, READ=1, WRITE=2, CRC1=3, CRC2=4;
+    
+    // main state machine sequential part
     always @(posedge clk or posedge rst)
     begin
-        if(rst)
-            crc_source_reg <= 1'b0; // async reset
-        else if(write_crc_source_reg)
-            crc_source_reg <= data_in[0];
-    end  
+        if(rst) // async reset
+        begin
+            state <= IDLE;
+            ctrl_reg <= 2'b00;
+            select_reg <= 4'b00;
+            crc_source_reg <= 1'b0;
+            data_out <= 8'b0;
+            
+        end
+        else if(cycle)
+        begin
+            state <= next_state; 
+            ctrl_reg <= next_ctrl_reg;  
+            select_reg <= next_select_reg;   
+            crc_source_reg <= next_crc_source_reg; 
+            data_out <= next_data_out;
+        end
+    end
+    
+    // main state machine combinatorial part
+    always @(*)
+    begin
+        // defaults
+        next_state = state;
+        next_ctrl_reg = ctrl_reg;
+        next_select_reg = select_reg;
+        next_crc_source_reg = crc_source_reg;
+        next_data_out = data_out;
+        start_read = 0;
+        start_write = 0;
+        crc_reset = 0;
+        
+        // states
+        case(state)
+        
+            // idle mode
+            IDLE:
+            begin
+                if(!r_w)
+                begin
+                    // write issues a command
+                    case(data_in[7:5])
+                        
+                        // command: write control register
+                        'd1:    
+                        begin
+                            next_ctrl_reg = data_in[1:0];
+                        end
+                        
+                        // command: write select register
+                        'd2:    
+                        begin
+                            next_select_reg = data_in[3:0];
+                        end
+                        
+                        // command: select CRC source and reset CRC generator
+                        'd3:    
+                        begin
+                            next_crc_source_reg = data_in[0];
+                            crc_reset = cycle;
+                        end
+                        
+                        // command: go to SPI read mode
+                        'd4:    
+                        begin
+                            next_state = READ;
+                        end
+                        
+                        // command: go to SPI write mode
+                        'd5:    
+                        begin
+                            next_state = WRITE;
+                        end
+                        
+                        // command: go to CRC read mode
+                        'd6:    
+                        begin
+                            next_state = CRC1;
+                        end
+                    
+                    endcase                    
+                end
+                else                
+                begin
+                    // read returns shifter busy flag                
+                    next_data_out = {7'bx, busy};
+                end
+            end
+            
+            // consecutive read mode
+            READ:
+            begin
+                if(r_w)
+                begin
+                    // read returns SPI data and starts a shift action
+                    next_data_out = shift_out;
+                    start_read = 1'b1;
+                    
+                end
+                else
+                begin
+                    // write returns to idle
+                    next_state = IDLE;
+                end
+            end
+            
+            // consecutive write mode or single byte read mode
+            WRITE:
+            begin
+                if(r_w)
+                begin
+                    // read returns SPI data and returns to idle
+                    next_data_out = shift_out;
+                    next_state = IDLE;
+                end
+                else
+                begin
+                    // write starts a shift action
+                    start_write = 1'b1;
+                end
+            end
+            
+            // CRC read mode
+            CRC1:
+            begin
+                if(r_w)
+                begin
+                    // read returns CRC high byte
+                    next_data_out = crc_out[15:8];
+                    next_state = CRC2;
+                end
+                else
+                begin
+                    // write returns to idle
+                    next_state = IDLE;
+                end
+            end
+            
+            // CRC read mode            
+            CRC2:
+            begin
+                // read returns CRC low byte
+                next_data_out = crc_out[7:0];
+                next_state = IDLE;
+            end
                 
+            // we are not in Kansas anymore          
+            default:
+            begin
+                next_state = IDLE;
+            end         
+               
+        endcase
+    end
+                 
     // shifter
     shifter SHIFT (
         .clk            ( clk ),             
@@ -180,7 +286,7 @@ module spi_controller(
         .shift_in       ( data_in ),    
         .shift_out      ( shift_out ),  
         .speed          ( ctrl_reg[1:0] ),
-        .crc_reset      ( write_crc_source_reg ),        
+        .crc_reset      ( crc_reset ),        
         .crc_source     ( crc_source_reg ),       
         .crc_out        ( crc_out ),  
         .miso           ( miso ),             
@@ -190,6 +296,6 @@ module spi_controller(
     );
      
     // spi chip selects
-    assign _cs[3:0] = ~select_reg[3:0];
+    assign _ss[3:0] = ~select_reg[3:0];
       
 endmodule
