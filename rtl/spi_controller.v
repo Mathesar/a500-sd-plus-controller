@@ -17,9 +17,7 @@
 `define  REGISTER_ADDRESS 4'hb
 
 module spi_controller(
-    input       cck,                // color clock
-    input       cckq,               // quadrature clock
-    input       cdac,               // cdac
+    input       clk,                // clock
     input       _reset,             // reset
     input       r_w,                // read / _write
     input       _cs,                // chip select
@@ -54,19 +52,6 @@ module spi_controller(
     reg  select_latch;
   
     reg  enable_data_out;
-
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-	// generate shifter clock
-	// (approx 14MHz)
-`ifdef ALTERA_RESERVED_QIS   	 
- 	global CLK_BUF (
-        .in             ((cck ~^ cckq) ~^ cdac), 
-        .out            (clk)
-    ); 
-`else
-    assign clk = (cck ~^ cckq) ~^ cdac;
-`endif
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////
      
@@ -218,7 +203,7 @@ module spi_controller(
                 begin
                     // read returns SPI data and starts a shift action
                     next_data_out = shift_out;
-                    start_read = 1'b1;
+                    start_read = cycle;
                     
                 end
                 else
@@ -240,7 +225,7 @@ module spi_controller(
                 else
                 begin
                     // write starts a shift action
-                    start_write = 1'b1;
+                    start_write = cycle;
                 end
             end
             
