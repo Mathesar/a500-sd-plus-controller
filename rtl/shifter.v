@@ -24,7 +24,7 @@ module shifter(
     input start_write,          // start write operation
     input start_read,           // start read operation    
     input [7:0]shift_in,        // parallel data in
-    output reg [7:0]shift_out,  // parallel data out    
+    output [7:0]shift_out,      // parallel data out    
     input [1:0]speed,           // speed setting
     input crc_reset,            // CRC generator reset
     input crc_source,           // CRC generator input source (0=MOSI, 1=MISO)
@@ -72,7 +72,7 @@ module shifter(
     end
     assign busy        = sequencer[4];
     assign shift       = busy & (seq_enable &  sequencer[0]);
-    assign shift_final = busy & (sequencer[3:1] == 3'b111) & shift ;
+    assign shift_final = (sequencer[3:1] == 3'b111);
     assign sample      = busy & (seq_enable & ~sequencer[0]);
             
     // main shifter
@@ -89,9 +89,7 @@ module shifter(
     end
     
     // shifter parallel out buffer
-    always @(posedge clk)
-        if(shift_final) 
-            shift_out[7:0] <= {shifter[6:0],miso_latch};
+    assign shift_out[7:0] = {shifter[6:0],miso_latch};
             
     // CRC generator
     assign crc16_in = (crc_source) ? (miso_latch ^ crc16[15]) : (shifter[7] ^ crc16[15]);
