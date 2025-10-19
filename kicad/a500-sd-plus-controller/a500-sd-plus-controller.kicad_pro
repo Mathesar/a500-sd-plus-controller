@@ -668,6 +668,10 @@
     [
       "b554c849-6477-4ce4-84e1-ed747b4b2523",
       "micro-sd"
+    ],
+    [
+      "c490d87e-0e26-4dec-8921-a52e469760ba",
+      "Ethernet"
     ]
   ],
   "text_variables": {}

@@ -5,10 +5,10 @@
 	(uuid "d838397f-464a-4b77-b91f-ba1a319641f7")
 	(paper "A4")
 	(title_block
-		(title "A500-SD-plus-controller")
-		(date "2025-09-26")
+		(title "A500 SD plus controller")
+		(date "2025-10-19")
 		(rev "1.0")
-		(company "Mathesar")
+		(company "Dennis van Weeren")
 	)
 	(lib_symbols
 		(symbol "Connector:Micro_SD_Card_Det2"
@@ -3287,7 +3287,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "0310e3af-a7b7-4a81-9992-7e66d65d1dfc")
-		(property "Reference" "#PWR054"
+		(property "Reference" "#PWR042"
 			(at 33.02 127 0)
 			(effects
 				(font
@@ -3337,7 +3337,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "#PWR054")
+					(reference "#PWR042")
 					(unit 1)
 				)
 			)
@@ -3353,7 +3353,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "22f6027f-301c-4d72-b53b-59e9efc9d79a")
-		(property "Reference" "R11"
+		(property "Reference" "R18"
 			(at 120.65 43.1799 0)
 			(effects
 				(font
@@ -3407,7 +3407,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "R11")
+					(reference "R18")
 					(unit 1)
 				)
 			)
@@ -3423,7 +3423,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "25b1d7c9-a1f3-49e2-935a-80894104f6ae")
-		(property "Reference" "#PWR046"
+		(property "Reference" "#PWR052"
 			(at 90.17 190.5 0)
 			(effects
 				(font
@@ -3473,7 +3473,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "#PWR046")
+					(reference "#PWR052")
 					(unit 1)
 				)
 			)
@@ -3488,7 +3488,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "27ba8c2c-4b66-45fd-8908-5740096e57a7")
-		(property "Reference" "#PWR024"
+		(property "Reference" "#PWR051"
 			(at 85.09 85.09 0)
 			(effects
 				(font
@@ -3538,7 +3538,7 @@
 		(instances
 			(project ""
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "#PWR024")
+					(reference "#PWR051")
 					(unit 1)
 				)
 			)
@@ -3554,7 +3554,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "293c50f1-f23c-4ad3-afce-e520ed2a33a7")
-		(property "Reference" "U10"
+		(property "Reference" "U7"
 			(at 50.8 119.38 0)
 			(effects
 				(font
@@ -3621,7 +3621,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "U10")
+					(reference "U7")
 					(unit 1)
 				)
 			)
@@ -3637,7 +3637,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2bb3f9ca-739f-43ac-b6ec-a2b1a68197cd")
-		(property "Reference" "R10"
+		(property "Reference" "R16"
 			(at 66.04 74.9299 0)
 			(effects
 				(font
@@ -3691,7 +3691,7 @@
 		(instances
 			(project ""
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "R10")
+					(reference "R16")
 					(unit 1)
 				)
 			)
@@ -3707,7 +3707,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "2f041b58-6797-4d9b-9b33-eb0ac074eb9b")
-		(property "Reference" "#PWR031"
+		(property "Reference" "#PWR048"
 			(at 63.5 97.79 0)
 			(effects
 				(font
@@ -3757,7 +3757,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "#PWR031")
+					(reference "#PWR048")
 					(unit 1)
 				)
 			)
@@ -3773,7 +3773,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "2f264c80-f7b4-4e4b-b932-25bbb1f8943e")
-		(property "Reference" "C19"
+		(property "Reference" "C17"
 			(at 29.21 133.3499 0)
 			(effects
 				(font
@@ -3827,7 +3827,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "C19")
+					(reference "C17")
 					(unit 1)
 				)
 			)
@@ -3930,7 +3930,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "41ce68ed-cc75-4648-a4df-ccedb469a8b0")
-		(property "Reference" "R16"
+		(property "Reference" "R12"
 			(at 53.848 58.42 90)
 			(effects
 				(font
@@ -3982,7 +3982,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "R16")
+					(reference "R12")
 					(unit 1)
 				)
 			)
@@ -3998,7 +3998,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "47b99e46-c83a-4d93-8d3f-6bdf63fb618d")
-		(property "Reference" "#PWR033"
+		(property "Reference" "#PWR045"
 			(at 44.45 46.99 0)
 			(effects
 				(font
@@ -4048,7 +4048,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "#PWR033")
+					(reference "#PWR045")
 					(unit 1)
 				)
 			)
@@ -4064,7 +4064,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "489ca409-b09f-4eb3-9b5e-6404551155e9")
-		(property "Reference" "#PWR032"
+		(property "Reference" "#PWR056"
 			(at 184.15 97.79 0)
 			(effects
 				(font
@@ -4114,7 +4114,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "#PWR032")
+					(reference "#PWR056")
 					(unit 1)
 				)
 			)
@@ -4197,7 +4197,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "63d2d594-32c4-4b4d-97bc-ddc66f5ebe7e")
-		(property "Reference" "R19"
+		(property "Reference" "R17"
 			(at 80.01 149.8599 0)
 			(effects
 				(font
@@ -4251,7 +4251,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "R19")
+					(reference "R17")
 					(unit 1)
 				)
 			)
@@ -4267,7 +4267,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "6d188fac-5625-4a99-9069-e464c46f6d6d")
-		(property "Reference" "#PWR040"
+		(property "Reference" "#PWR054"
 			(at 133.35 97.79 0)
 			(effects
 				(font
@@ -4317,7 +4317,7 @@
 		(instances
 			(project ""
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "#PWR040")
+					(reference "#PWR054")
 					(unit 1)
 				)
 			)
@@ -4333,7 +4333,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "74c1d902-0fae-40b8-8dd4-980d15982c0c")
-		(property "Reference" "#PWR034"
+		(property "Reference" "#PWR050"
 			(at 80.01 46.99 0)
 			(effects
 				(font
@@ -4383,7 +4383,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "#PWR034")
+					(reference "#PWR050")
 					(unit 1)
 				)
 			)
@@ -4399,7 +4399,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "818bb63f-432a-49c8-b114-4e86e710f894")
-		(property "Reference" "#PWR036"
+		(property "Reference" "#PWR044"
 			(at 44.45 26.67 0)
 			(effects
 				(font
@@ -4449,7 +4449,7 @@
 		(instances
 			(project ""
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "#PWR036")
+					(reference "#PWR044")
 					(unit 1)
 				)
 			)
@@ -4464,7 +4464,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "84906fef-2a0f-48e9-8349-79f13ded5dc7")
-		(property "Reference" "C13"
+		(property "Reference" "C19"
 			(at 67.31 83.8199 0)
 			(effects
 				(font
@@ -4518,7 +4518,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "C13")
+					(reference "C19")
 					(unit 1)
 				)
 			)
@@ -4534,7 +4534,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "8747f1da-a8e1-470b-a42b-b0c286eb1241")
-		(property "Reference" "#PWR056"
+		(property "Reference" "#PWR046"
 			(at 50.8 147.32 0)
 			(effects
 				(font
@@ -4584,7 +4584,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "#PWR056")
+					(reference "#PWR046")
 					(unit 1)
 				)
 			)
@@ -4600,7 +4600,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "9c98d451-0d87-4e59-88aa-e213876438e0")
-		(property "Reference" "#PWR023"
+		(property "Reference" "#PWR053"
 			(at 110.49 97.79 0)
 			(effects
 				(font
@@ -4650,7 +4650,7 @@
 		(instances
 			(project ""
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "#PWR023")
+					(reference "#PWR053")
 					(unit 1)
 				)
 			)
@@ -4769,7 +4769,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "a66ef3ae-273f-435d-865c-f9981be54132")
-		(property "Reference" "R12"
+		(property "Reference" "R14"
 			(at 53.848 68.58 90)
 			(effects
 				(font
@@ -4821,7 +4821,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "R12")
+					(reference "R14")
 					(unit 1)
 				)
 			)
@@ -4837,7 +4837,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "b9db4837-e842-4abc-a3c3-61ece6cd5602")
-		(property "Reference" "#PWR055"
+		(property "Reference" "#PWR043"
 			(at 33.02 147.32 0)
 			(effects
 				(font
@@ -4887,7 +4887,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "#PWR055")
+					(reference "#PWR043")
 					(unit 1)
 				)
 			)
@@ -4986,7 +4986,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "cd3bca20-44cf-42c0-8f35-72c8da8b4985")
-		(property "Reference" "U5"
+		(property "Reference" "U9"
 			(at 97.79 74.93 90)
 			(effects
 				(font
@@ -5050,7 +5050,7 @@
 		(instances
 			(project ""
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "U5")
+					(reference "U9")
 					(unit 1)
 				)
 			)
@@ -5066,7 +5066,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "cd92e6b1-af6c-46ed-96c7-b171b641c8dc")
-		(property "Reference" "#PWR057"
+		(property "Reference" "#PWR049"
 			(at 68.58 147.32 0)
 			(effects
 				(font
@@ -5116,7 +5116,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "#PWR057")
+					(reference "#PWR049")
 					(unit 1)
 				)
 			)
@@ -5131,7 +5131,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "ce72664f-cb56-45c1-96f1-3dbedc41fdfe")
-		(property "Reference" "C9"
+		(property "Reference" "C21"
 			(at 83.82 33.0199 0)
 			(effects
 				(font
@@ -5185,7 +5185,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "C9")
+					(reference "C21")
 					(unit 1)
 				)
 			)
@@ -5201,7 +5201,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d00fe7ee-e0bd-469f-ac0d-87a4497f67cf")
-		(property "Reference" "#PWR044"
+		(property "Reference" "#PWR057"
 			(at 228.6 143.51 0)
 			(effects
 				(font
@@ -5251,7 +5251,7 @@
 		(instances
 			(project ""
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "#PWR044")
+					(reference "#PWR057")
 					(unit 1)
 				)
 			)
@@ -5267,7 +5267,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "d6e39602-4b06-4f49-9970-8e097479c061")
-		(property "Reference" "#PWR030"
+		(property "Reference" "#PWR047"
 			(at 62.23 46.99 0)
 			(effects
 				(font
@@ -5317,7 +5317,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "#PWR030")
+					(reference "#PWR047")
 					(unit 1)
 				)
 			)
@@ -5333,7 +5333,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "da8ec9d3-6bad-42e2-be7b-2dd1c71f700f")
-		(property "Reference" "J1"
+		(property "Reference" "J4"
 			(at 161.925 44.45 0)
 			(effects
 				(font
@@ -5421,7 +5421,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "J1")
+					(reference "J4")
 					(unit 1)
 				)
 			)
@@ -5436,7 +5436,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "dea2fd9b-e537-4aa4-819c-e5ea440fe837")
-		(property "Reference" "R14"
+		(property "Reference" "R13"
 			(at 53.848 63.5 90)
 			(effects
 				(font
@@ -5488,7 +5488,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "R14")
+					(reference "R13")
 					(unit 1)
 				)
 			)
@@ -5504,7 +5504,7 @@
 		(dnp no)
 		(fields_autoplaced yes)
 		(uuid "ee1ecdde-8c04-4b16-8941-08943e7ee69a")
-		(property "Reference" "#PWR047"
+		(property "Reference" "#PWR055"
 			(at 140.97 190.5 0)
 			(effects
 				(font
@@ -5554,7 +5554,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "#PWR047")
+					(reference "#PWR055")
 					(unit 1)
 				)
 			)
@@ -5639,7 +5639,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "f21e60e2-402b-440b-8c61-bf4dfdd96a7f")
-		(property "Reference" "C10"
+		(property "Reference" "C18"
 			(at 40.64 33.0199 0)
 			(effects
 				(font
@@ -5693,7 +5693,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "C10")
+					(reference "C18")
 					(unit 1)
 				)
 			)
@@ -5708,7 +5708,7 @@
 		(on_board yes)
 		(dnp no)
 		(uuid "fcb40bf4-4e5d-4be8-9def-a3a5e350fb86")
-		(property "Reference" "R17"
+		(property "Reference" "R19"
 			(at 231.14 115.062 90)
 			(effects
 				(font
@@ -5760,7 +5760,7 @@
 		(instances
 			(project "a500-sd-plus-controller"
 				(path "/873c5c52-0446-47b4-807c-ab8213707692/b554c849-6477-4ce4-84e1-ed747b4b2523"
-					(reference "R17")
+					(reference "R19")
 					(unit 1)
 				)
 			)
