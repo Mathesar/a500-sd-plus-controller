@@ -6418,6 +6418,16 @@
 	)
 	(wire
 		(pts
+			(xy 71.12 182.88) (xy 71.12 184.15)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "11f0f640-5dcd-49b9-8738-679294fd5882")
+	)
+	(wire
+		(pts
 			(xy 85.09 59.69) (xy 96.52 59.69)
 		)
 		(stroke
@@ -7748,7 +7758,7 @@
 	)
 	(wire
 		(pts
-			(xy 50.8 157.48) (xy 44.45 157.48)
+			(xy 44.45 167.64) (xy 71.12 167.64)
 		)
 		(stroke
 			(width 0)
@@ -7965,16 +7975,6 @@
 			(type default)
 		)
 		(uuid "ab7d7b83-1c09-4c9a-b872-7f6bd9d2f190")
-	)
-	(wire
-		(pts
-			(xy 50.8 167.64) (xy 50.8 157.48)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ac2bfad4-aa67-41df-b621-4d967a8cac59")
 	)
 	(wire
 		(pts
@@ -8235,16 +8235,6 @@
 			(type default)
 		)
 		(uuid "c8f16a56-88d6-47c4-8f78-4a4e73567c23")
-	)
-	(wire
-		(pts
-			(xy 71.12 167.64) (xy 50.8 167.64)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ca7f1056-c229-4fef-88ea-049bfacc9769")
 	)
 	(wire
 		(pts
@@ -9580,7 +9570,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "BSS138"
+		(property "Value" "AO3400A"
 			(at 67.31 179.0699 0)
 			(effects
 				(font
@@ -14224,8 +14214,8 @@
 		)
 	)
 	(sheet
-		(at 17.78 173.99)
-		(size 33.02 15.24)
+		(at 201.93 132.08)
+		(size 33.02 25.4)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -14239,7 +14229,7 @@
 		)
 		(uuid "49e6a263-4657-4aa1-a863-22e7f8884b60")
 		(property "Sheetname" "Voltage regulators"
-			(at 25.4 181.356 0)
+			(at 209.55 139.446 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14248,7 +14238,7 @@
 			)
 		)
 		(property "Sheetfile" "voltage_regulators.kicad_sch"
-			(at 17.272 191.77 0)
+			(at 201.93 158.75 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14279,8 +14269,8 @@
 			(color 255 255 194 1.0000)
 		)
 		(uuid "b554c849-6477-4ce4-84e1-ed747b4b2523")
-		(property "Sheetname" "micro-sd"
-			(at 167.894 144.78 0)
+		(property "Sheetname" "Micro-SD"
+			(at 166.116 139.954 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14397,7 +14387,7 @@
 	)
 	(sheet
 		(at 17.78 24.13)
-		(size 26.67 138.43)
+		(size 26.67 156.21)
 		(exclude_from_sim no)
 		(in_bom yes)
 		(on_board yes)
@@ -14420,7 +14410,7 @@
 			)
 		)
 		(property "Sheetfile" "mainboard_riser.kicad_sch"
-			(at 16.002 164.084 0)
+			(at 15.748 181.356 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -14489,7 +14479,7 @@
 			)
 		)
 		(pin "~{INT}" input
-			(at 44.45 157.48 0)
+			(at 44.45 167.64 0)
 			(uuid "445b584c-8b02-4ef7-a113-7f7acf94f452")
 			(effects
 				(font

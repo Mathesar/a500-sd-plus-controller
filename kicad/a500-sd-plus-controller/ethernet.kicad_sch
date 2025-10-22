@@ -3199,6 +3199,16 @@
 		)
 		(uuid "3c4386d3-28be-4042-bd6e-feba20e51d41")
 	)
+	(text "NO \"Bob Smith\"\nWe want to be as \nisolated as possible"
+		(exclude_from_sim no)
+		(at 231.14 103.632 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "3f84dea6-e3fc-4c38-835b-5f461a46831f")
+	)
 	(text "half-duplex\nPDPXMD = 0"
 		(exclude_from_sim no)
 		(at 152.4 68.58 0)
