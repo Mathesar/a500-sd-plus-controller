@@ -4729,6 +4729,15 @@
 				(hide yes)
 			)
 		)
+		(property "Quantity" "${QUANTITY}"
+			(at 189.23 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "0fa24263-3360-44ca-b630-4faec124ec76")
 		)
@@ -4978,6 +4987,15 @@
 			)
 		)
 		(property "MPN" ""
+			(at 109.22 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
 			(at 109.22 64.77 0)
 			(effects
 				(font

@@ -9609,6 +9609,33 @@
 				(hide yes)
 			)
 		)
+		(property "MPN" "AO3400A"
+			(at 73.66 177.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C20917"
+			(at 73.66 177.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 73.66 177.8 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "e99d7184-d6a6-475c-a571-c20da685737c")
 		)
@@ -9810,7 +9837,25 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "5M160ZE64I5N"
+		(property "MPN" "5M160ZE64C5N"
+			(at 198.12 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C431489"
+			(at 198.12 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
 			(at 198.12 69.85 0)
 			(effects
 				(font
@@ -10077,6 +10122,15 @@
 				(hide yes)
 			)
 		)
+		(property "Quantity" "${QUANTITY}"
+			(at 149.86 93.98 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "2de94941-4d79-4dbb-9513-57082134006a")
 		)
@@ -10199,7 +10253,7 @@
 				)
 			)
 		)
-		(property "Value" "47E"
+		(property "Value" "100R"
 			(at 53.086 32.004 90)
 			(effects
 				(font
@@ -10227,6 +10281,24 @@
 		)
 		(property "Description" "Resistor"
 			(at 53.34 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 53.34 34.29 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C22775"
+			(at 53.34 34.29 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10301,6 +10373,24 @@
 				(hide yes)
 			)
 		)
+		(property "Quantity" "${QUANTITY}"
+			(at 152.4 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C14663"
+			(at 152.4 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "3ce91c1f-02cf-4247-a074-a313480e2c92")
 		)
@@ -10361,6 +10451,24 @@
 		)
 		(property "Description" "Unpolarized capacitor"
 			(at 83.82 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 83.82 21.59 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C14663"
+			(at 83.82 21.59 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10567,6 +10675,24 @@
 				(hide yes)
 			)
 		)
+		(property "Quantity" "${QUANTITY}"
+			(at 83.82 100.33 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C14663"
+			(at 83.82 100.33 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "99e1ec74-9af0-4899-a24f-1eb84e158d28")
 		)
@@ -10634,6 +10760,24 @@
 				(hide yes)
 			)
 		)
+		(property "Quantity" "${QUANTITY}"
+			(at 137.16 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C14663"
+			(at 137.16 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "ba6049cd-0b61-428e-bd81-9113c4caea38")
 		)
@@ -10666,7 +10810,7 @@
 				)
 			)
 		)
-		(property "Value" "47E"
+		(property "Value" "100R"
 			(at 53.086 52.324 90)
 			(effects
 				(font
@@ -10694,6 +10838,24 @@
 		)
 		(property "Description" "Resistor"
 			(at 53.34 54.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 53.34 54.61 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C22775"
+			(at 53.34 54.61 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -10866,7 +11028,7 @@
 				)
 			)
 		)
-		(property "Value" "100E"
+		(property "Value" "100R"
 			(at 170.942 106.68 0)
 			(effects
 				(font
@@ -10893,6 +11055,24 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 166.37 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 166.37 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C22775"
 			(at 166.37 105.41 0)
 			(effects
 				(font
@@ -11099,6 +11279,24 @@
 				(hide yes)
 			)
 		)
+		(property "Quantity" "${QUANTITY}"
+			(at 129.54 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C14663"
+			(at 129.54 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "570ac97b-73cb-43c1-8a71-6321f0a3c302")
 		)
@@ -11197,7 +11395,7 @@
 				)
 			)
 		)
-		(property "Value" "47E"
+		(property "Value" "100R"
 			(at 53.086 67.564 90)
 			(effects
 				(font
@@ -11232,6 +11430,24 @@
 				(hide yes)
 			)
 		)
+		(property "Quantity" "${QUANTITY}"
+			(at 53.34 69.85 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C22775"
+			(at 53.34 69.85 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "6b5ebb51-8387-4177-ba06-b9511b2817cf")
 		)
@@ -11257,14 +11473,14 @@
 		(dnp no)
 		(uuid "5e4d616d-8e86-41d4-b109-76e877f1c5ba")
 		(property "Reference" "R10"
-			(at 266.446 69.85 90)
+			(at 258.826 69.85 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "100E"
+		(property "Value" "470R"
 			(at 264.16 69.85 90)
 			(effects
 				(font
@@ -11292,6 +11508,24 @@
 		)
 		(property "Description" "Resistor"
 			(at 261.62 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 261.62 69.85 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C23179"
+			(at 261.62 69.85 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11434,7 +11668,25 @@
 				(hide yes)
 			)
 		)
-		(property "MPN" "5M160ZE64I5N"
+		(property "MPN" "5M160ZE64C5N"
+			(at 107.95 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C431489"
+			(at 107.95 176.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
 			(at 107.95 176.53 0)
 			(effects
 				(font
@@ -11730,7 +11982,7 @@
 				)
 			)
 		)
-		(property "Value" "47E"
+		(property "Value" "100R"
 			(at 53.086 37.084 90)
 			(effects
 				(font
@@ -11758,6 +12010,24 @@
 		)
 		(property "Description" "Resistor"
 			(at 53.34 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 53.34 39.37 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C22775"
+			(at 53.34 39.37 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -11835,6 +12105,24 @@
 			)
 		)
 		(property "MPN" "SN74LVC4245APWR"
+			(at 74.93 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C7859"
+			(at 74.93 52.07 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
 			(at 74.93 52.07 0)
 			(effects
 				(font
@@ -12116,6 +12404,24 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C255993"
+			(at 128.27 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 128.27 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "f721c0c9-04a1-4af6-a42e-00f50302415f")
 		)
@@ -12386,6 +12692,24 @@
 				(hide yes)
 			)
 		)
+		(property "Quantity" "${QUANTITY}"
+			(at 160.02 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C14663"
+			(at 160.02 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "dc1245f7-30f7-439b-89e7-1b2217f97224")
 		)
@@ -12588,6 +12912,24 @@
 				(hide yes)
 			)
 		)
+		(property "Quantity" "${QUANTITY}"
+			(at 166.37 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C14858"
+			(at 166.37 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "83b9878b-e604-4387-a54c-222469f6d285")
 		)
@@ -12656,6 +12998,24 @@
 				(hide yes)
 			)
 		)
+		(property "Quantity" "${QUANTITY}"
+			(at 66.04 100.33 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C14663"
+			(at 66.04 100.33 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "2ceef41a-b42b-49a8-ab4d-3068a809e473")
 		)
@@ -12688,7 +13048,7 @@
 				)
 			)
 		)
-		(property "Value" "47E"
+		(property "Value" "100R"
 			(at 53.086 57.404 90)
 			(effects
 				(font
@@ -12716,6 +13076,24 @@
 		)
 		(property "Description" "Resistor"
 			(at 53.34 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 53.34 59.69 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C22775"
+			(at 53.34 59.69 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12755,7 +13133,7 @@
 				)
 			)
 		)
-		(property "Value" "47E"
+		(property "Value" "100R"
 			(at 53.086 42.164 90)
 			(effects
 				(font
@@ -12783,6 +13161,24 @@
 		)
 		(property "Description" "Resistor"
 			(at 53.34 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 53.34 44.45 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C22775"
+			(at 53.34 44.45 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -12926,6 +13322,24 @@
 			)
 		)
 		(property "MPN" "SN74LVC4245APWR"
+			(at 74.93 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C7859"
+			(at 74.93 129.54 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
 			(at 74.93 129.54 0)
 			(effects
 				(font
@@ -13133,6 +13547,24 @@
 				(hide yes)
 			)
 		)
+		(property "Quantity" "${QUANTITY}"
+			(at 121.92 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C14663"
+			(at 121.92 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "b3e8fefe-2262-4c8c-a86f-bcf2b03af84b")
 		)
@@ -13332,6 +13764,24 @@
 				(hide yes)
 			)
 		)
+		(property "Quantity" "${QUANTITY}"
+			(at 144.78 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C14663"
+			(at 144.78 181.61 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "63fa3b7c-6622-4d21-ab16-42eec422c86b")
 		)
@@ -13365,7 +13815,7 @@
 				)
 			)
 		)
-		(property "Value" "47E"
+		(property "Value" "100R"
 			(at 141.224 54.864 90)
 			(effects
 				(font
@@ -13393,6 +13843,24 @@
 		)
 		(property "Description" "Resistor"
 			(at 140.97 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 140.97 57.15 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C22775"
+			(at 140.97 57.15 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13562,7 +14030,7 @@
 				)
 			)
 		)
-		(property "Value" "47E"
+		(property "Value" "100R"
 			(at 53.086 62.484 90)
 			(effects
 				(font
@@ -13590,6 +14058,24 @@
 		)
 		(property "Description" "Resistor"
 			(at 53.34 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 53.34 64.77 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C22775"
+			(at 53.34 64.77 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13694,7 +14180,7 @@
 				)
 			)
 		)
-		(property "Value" "47E"
+		(property "Value" "100R"
 			(at 53.086 47.244 90)
 			(effects
 				(font
@@ -13722,6 +14208,24 @@
 		)
 		(property "Description" "Resistor"
 			(at 53.34 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 53.34 49.53 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C22775"
+			(at 53.34 49.53 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13799,6 +14303,15 @@
 				(hide yes)
 			)
 		)
+		(property "Quantity" "${QUANTITY}"
+			(at 269.24 77.47 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "9393029c-bd65-486e-816a-a5cf351ba55c")
 		)
@@ -13859,6 +14372,24 @@
 		)
 		(property "Description" "Unpolarized capacitor"
 			(at 66.04 21.59 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 66.04 21.59 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C14663"
+			(at 66.04 21.59 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13929,6 +14460,24 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 115.57 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 115.57 57.15 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C14663"
 			(at 115.57 57.15 0)
 			(effects
 				(font
@@ -14229,7 +14778,7 @@
 		)
 		(uuid "49e6a263-4657-4aa1-a863-22e7f8884b60")
 		(property "Sheetname" "Voltage regulators"
-			(at 209.55 139.446 0)
+			(at 210.312 139.954 0)
 			(effects
 				(font
 					(size 1.27 1.27)

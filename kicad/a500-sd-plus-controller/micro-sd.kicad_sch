@@ -2228,6 +2228,16 @@
 		)
 		(uuid "845074e5-f286-4095-a2b4-4bf1f619cc1b")
 	)
+	(text "estimated impedance of micro-sd extension cable is ~100 Ohm\n(alternating ground, pitch 1.27mm, copper width ~\n0.8mm)"
+		(exclude_from_sim no)
+		(at 82.042 51.308 0)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+		)
+		(uuid "a3646cb4-27bb-4a8f-8485-8be6739bd227")
+	)
 	(junction
 		(at 68.58 125.73)
 		(diameter 0)
@@ -3169,7 +3179,7 @@
 		(uuid "08e5b1da-5c9b-48d6-94c7-0b74c0fb4d0a")
 	)
 	(label "+3V3_SD1"
-		(at 67.31 125.73 0)
+		(at 69.85 125.73 0)
 		(effects
 			(font
 				(size 1.27 1.27)
@@ -3398,6 +3408,24 @@
 				(hide yes)
 			)
 		)
+		(property "Quantity" "${QUANTITY}"
+			(at 118.11 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C25804"
+			(at 118.11 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "ddfa6a50-5d89-45a0-b47f-acdcd5e0596e")
 		)
@@ -3606,6 +3634,24 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C587158"
+			(at 50.8 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 50.8 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "1ee06c16-80ca-458d-9d83-13a82c9673fe")
 		)
@@ -3646,7 +3692,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "100E"
+		(property "Value" "100R"
 			(at 66.04 77.4699 0)
 			(effects
 				(font
@@ -3674,6 +3720,24 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 63.5 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 63.5 76.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C22775"
 			(at 63.5 76.2 0)
 			(effects
 				(font
@@ -3818,6 +3882,24 @@
 				(hide yes)
 			)
 		)
+		(property "Quantity" "${QUANTITY}"
+			(at 33.02 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C28323"
+			(at 33.02 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "4299c4d3-2c00-4c1f-a991-e0e2973e2ea0")
 		)
@@ -3906,6 +3988,24 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C84256"
+			(at 228.6 130.81 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 228.6 130.81 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "b9988699-1d83-43fc-a0fd-bc71f727388f")
 		)
@@ -3938,7 +4038,7 @@
 				)
 			)
 		)
-		(property "Value" "100E"
+		(property "Value" "100R"
 			(at 48.26 58.42 90)
 			(effects
 				(font
@@ -3966,6 +4066,24 @@
 		)
 		(property "Description" "Resistor"
 			(at 48.26 55.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 48.26 55.88 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C22775"
+			(at 48.26 55.88 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4137,7 +4255,7 @@
 				)
 			)
 		)
-		(property "Value" "100E"
+		(property "Value" "100R"
 			(at 48.26 73.66 90)
 			(effects
 				(font
@@ -4165,6 +4283,24 @@
 		)
 		(property "Description" "Resistor"
 			(at 48.26 71.12 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 48.26 71.12 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C22775"
+			(at 48.26 71.12 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4234,6 +4370,24 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 82.55 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 82.55 151.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C25804"
 			(at 82.55 151.13 0)
 			(effects
 				(font
@@ -4509,6 +4663,24 @@
 				(hide yes)
 			)
 		)
+		(property "Quantity" "${QUANTITY}"
+			(at 63.5 85.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C14858"
+			(at 63.5 85.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "d334a518-7bd6-4421-841c-34b7b46a40df")
 		)
@@ -4718,6 +4890,24 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C114218"
+			(at 118.11 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 118.11 167.64 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "5"
 			(uuid "895111ef-2cd8-404f-adf9-40bf975fda11")
 		)
@@ -4777,7 +4967,7 @@
 				)
 			)
 		)
-		(property "Value" "100E"
+		(property "Value" "100R"
 			(at 48.26 68.58 90)
 			(effects
 				(font
@@ -4805,6 +4995,24 @@
 		)
 		(property "Description" "Resistor"
 			(at 48.26 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 48.26 66.04 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C22775"
+			(at 48.26 66.04 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -4955,6 +5163,24 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C587158"
+			(at 62.23 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 62.23 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "7f209416-1f3d-4de9-9d3b-3c0d884d65e0")
 		)
@@ -5022,6 +5248,33 @@
 		)
 		(property "Description" "ESD Protection Diode, Low Clamping Voltage"
 			(at 97.79 85.09 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "MPN" "SRV05-4"
+			(at 97.79 85.09 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C2836319"
+			(at 97.79 85.09 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 97.79 85.09 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5168,6 +5421,24 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 80.01 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 80.01 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C28323"
 			(at 80.01 34.29 0)
 			(effects
 				(font
@@ -5385,6 +5656,24 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C114218"
+			(at 161.29 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 161.29 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "5"
 			(uuid "eb858775-126d-4d8d-b4cd-ca2a9ab48c4d")
 		)
@@ -5444,7 +5733,7 @@
 				)
 			)
 		)
-		(property "Value" "100E"
+		(property "Value" "100R"
 			(at 48.26 63.5 90)
 			(effects
 				(font
@@ -5472,6 +5761,24 @@
 		)
 		(property "Description" "Resistor"
 			(at 48.26 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 48.26 60.96 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C22775"
+			(at 48.26 60.96 90)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -5614,6 +5921,24 @@
 				(hide yes)
 			)
 		)
+		(property "Quantity" "${QUANTITY}"
+			(at 68.58 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C28323"
+			(at 68.58 134.62 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "92eeef34-6d40-48e0-94d4-b43d6ed5ea45")
 		)
@@ -5684,6 +6009,24 @@
 				(hide yes)
 			)
 		)
+		(property "Quantity" "${QUANTITY}"
+			(at 44.45 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C28323"
+			(at 44.45 34.29 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "e23419d3-3fed-4db1-8ac0-ada43ea3d9ec")
 		)
@@ -5709,14 +6052,14 @@
 		(dnp no)
 		(uuid "fcb40bf4-4e5d-4be8-9def-a3a5e350fb86")
 		(property "Reference" "R19"
-			(at 231.14 115.062 90)
+			(at 226.06 120.65 90)
 			(effects
 				(font
 					(size 1.27 1.27)
 				)
 			)
 		)
-		(property "Value" "100E"
+		(property "Value" "470R"
 			(at 231.14 120.65 90)
 			(effects
 				(font
@@ -5744,6 +6087,24 @@
 		)
 		(property "Description" "Resistor"
 			(at 228.6 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Quantity" "${QUANTITY}"
+			(at 228.6 120.65 90)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C23179"
+			(at 228.6 120.65 90)
 			(effects
 				(font
 					(size 1.27 1.27)
