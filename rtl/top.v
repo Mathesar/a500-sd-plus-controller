@@ -13,6 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+// register address, we use the unused CIA register
+`define REGISTER_ADDRESS 4'hb
+
 module top(
     // CIA piggyback interface
     input       clk,                // clock
@@ -21,9 +24,10 @@ module top(
     input       _cs_mb,             // chip select from motherboard
     output      _cs_cia,            // chip select to CIA
     input       e,                  // E clock
-    output      int,                // interrupt output
+    output      int_req,            // interrupt request
     input       [3:0]rs,            // register address    
     inout       [7:0]data,          // data bus
+	output		dir,				// bus buffer direction
     
     // Ethernet controller
     input       eth_miso,           // Ethernet MISO
@@ -45,17 +49,22 @@ module top(
     wire [3:0]_ss;
         
     // interrupt pass through
-    assign int = ~_eth_int;
+    assign int_req = ~_eth_int;
     
-    // reset
+    // reset pass through
     assign _eth_reset = _reset;
     
     // CIA chipselect control
-    wire spi_reg_selected = (rs[3:0] == 4'hb) ? 1'b1 : 1'b0;
+    wire spi_reg_selected = (rs[3:0] == `REGISTER_ADDRESS) ? 1'b1 : 1'b0;
     assign _cs_cia = _cs_mb | spi_reg_selected;
         
     // SPI controller
-    spi_controller dut (
+    spi_controller 
+	#( 
+		.REG_ADDR	( `REGISTER_ADDRESS ) 
+	) 
+	SPI
+ 	(
         .clk        ( clk ), 
         ._reset     ( _reset ),
         .r_w        ( r_w ),
@@ -63,6 +72,7 @@ module top(
         .e          ( e ),
         .rs         ( rs[3:0] ),
         .data       ( data[7:0] ),
+		.ext_oe 	( ext_oe ),
         .miso       ( miso ),
         .mosi       ( mosi ),
         .sclk       ( sclk ),
@@ -84,6 +94,12 @@ module top(
     
     // MISO mux
     assign miso = ( _sd_ss[0] | sd_miso[0] ) & ( _sd_ss[1] | sd_miso[1] ) & (_eth_ss | eth_miso );
+	 
+	// LEDs
+	assign sd_led  = _sd_ss[0] | _sd_ss[1];
+	assign hdd_led = _sd_ss[0] | _sd_ss[1];
 
+	// bus buffer direction
+	assign dir = ~ext_oe;
 
 endmodule

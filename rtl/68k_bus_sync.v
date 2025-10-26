@@ -17,25 +17,27 @@
 // CIA bus synchronizer
 module sync_cia_bus (
     input       clk,                // destination clock
-    input       _reset_in,          // reset
-    output      rst_out,
-    input       reg_decode_in,      // register address strobe
-    output      reg_decode_out,
-    input       _cs_in,             // chip select
-    output      _cs_out,
-    input       e_in,               // E clock
-    output      e_out,
-    input       [7:0]data_in,       // databus
-    output      [7:0]data_out      
+    input       _reset,             // reset
+    output      rst,
+    input       reg_decode,         // register address strobe
+    output      reg_decode_synced,
+    input       r_w,                // R/_W
+    output      r_w_synced,
+    input       _cs,                // chip select
+    output      _cs_synced,
+    input       e,                  // E clock
+    output      e_synced,
+    input       [7:0]data,          // databus
+    output      [7:0]data_synced      
     );
     
     genvar i;		 
     reg [1:0]rst_ff;
     
     // reset signal
-    always @(posedge clk or negedge _reset_in)
+    always @(posedge clk or negedge _reset)
     begin
-        if(!_reset_in)
+        if(!_reset)
             rst_ff[1:0] <= 2'b11; // async assert
         else 
             rst_ff[1:0] <= { rst_ff[0], 1'b0 }; // sync de-assert
@@ -45,26 +47,29 @@ module sync_cia_bus (
     `ifdef ALTERA_RESERVED_QIS   	 
         global CLK_BUF (
             .in             (rst_ff[1]), 
-            .out            (rst_out)
+            .out            (rst)
         ); 
     `else
-        assign rst_out = rst_ff[1];
+        assign rst = rst_ff[1];
     `endif
     
     // register decode
-    sync SYNC_RS ( clk, reg_decode_in, reg_decode_out );
+    sync SYNC_RS ( clk, reg_decode, reg_decode_synced );
     
+    // r/_w
+    sync SYNC_RW ( clk, r_w, r_w_synced );
+
     // chip select
-    sync SYNC_CS ( clk, _cs_in, _cs_out );
+    sync SYNC_CS ( clk, _cs, _cs_synced );
 
     // E clock
-    sync SYNC_E ( clk, e_in, e_out );
+    sync SYNC_E ( clk, e, e_synced );
 	
     // data bus
     generate
         for (i = 0; i <= 7; i = i + 1) 
         begin : gen_data
-            sync SYNC_DATA (clk, data_in[i], data_out[i]); 
+            sync SYNC_DATA (clk, data[i], data_synced[i]); 
         end
 	endgenerate	
 

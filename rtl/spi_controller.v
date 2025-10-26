@@ -13,10 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-// register address
-`define  REGISTER_ADDRESS 4'hb
-
-module spi_controller(
+module spi_controller
+	#(
+	parameter	REG_ADDR = 4'hb		// register address
+	)
+	(
     input       clk,                // clock
     input       _reset,             // reset
     input       r_w,                // read / _write
@@ -24,6 +25,7 @@ module spi_controller(
     input       e,                  // E clock
     input       [3:0]rs,            // register address    
     inout       [7:0]data,          // data bus
+	output      ext_oe,				// external driver output enable
     input       miso,               // SPI MISO
     output      mosi,               // SPI MOSI
     output      sclk,               // SPI SCLK
@@ -41,7 +43,7 @@ module spi_controller(
     reg  [2:0]state;
     reg  [2:0]next_state;
     
-    wire [7:0]data_in;
+    wire [7:0]data_synced;
     wire [7:0]shift_out;
     wire [15:0]crc_out;
         
@@ -51,47 +53,36 @@ module spi_controller(
     wire select,cycle;
     reg  select_latch;
   
-    reg  enable_data_out;
+    reg  enable_data_out_internal;
+    reg  enable_data_out_external;
     
     //////////////////////////////////////////////////////////////////////////////////////////////////////
      
-    assign reg_decode_async = (rs[3:0]==`REGISTER_ADDRESS) ? 1'b1 : 1'b0;
+    assign reg_decode = (rs[3:0]==REG_ADDR) ? 1'b1 : 1'b0;
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    // reading of registers is asynchronous
-    // address and control lines are guaranteed 
-    // stable when _cs goes low
-    always @(posedge e or posedge _cs)
-    begin
-        if(_cs)
-            enable_data_out <= 1'b0;
-        else if( reg_decode_async && r_w && !_cs)
-            enable_data_out <= 1'b1;   
-    end
-        
-    // data bus tri-state control
-    assign data = (enable_data_out) ? data_out : 8'bz;
-        
     //////////////////////////////////////////////////////////////////////////////////////////////////////
                         
     // synchronize asynchronous input signals to shifter clock
     sync_cia_bus SYNC_BUS (
         .clk                ( clk ),
-        ._reset_in          ( _reset ),
-        .rst_out            ( rst ),
-        .reg_decode_in      ( reg_decode_async ), 
-        .reg_decode_out     ( reg_decode ),
-        ._cs_in             ( _cs ),
-        ._cs_out            ( _chip_select ),
-        .e_in               ( e ),
-        .e_out              ( e_clk ),
-        .data_in            ( data ),
-        .data_out           ( data_in )
+        ._reset             ( _reset ),
+        .rst                ( rst ),
+        .reg_decode         ( reg_decode ), 
+        .reg_decode_synced  ( reg_decode_synced ),
+        .r_w                ( r_w ),
+        .r_w_synced         ( r_w_synced ),
+        ._cs                ( _cs ),
+        ._cs_synced         ( _cs_synced ),
+        .e                  ( e ),
+        .e_synced           ( e_synced ),
+        .data               ( data ),
+        .data_synced        ( data_synced )
     );
        
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+
     // detect start of access cycle
-    assign select = (reg_decode) & e_clk & ~_chip_select;
+    assign select = (reg_decode_synced) & e_synced & ~_cs_synced;
     always @(posedge clk or posedge rst)
     begin
         if(rst)
@@ -148,24 +139,24 @@ module spi_controller(
                 if(!r_w)
                 begin
                     // write issues a command
-                    case(data_in[7:5])
+                    case(data_synced[7:5])
                         
                         // command: write control register
                         'd1:    
                         begin
-                            next_ctrl_reg = data_in[1:0];
+                            next_ctrl_reg = data_synced[1:0];
                         end
                         
                         // command: write select register
                         'd2:    
                         begin
-                            next_select_reg = data_in[3:0];
+                            next_select_reg = data_synced[3:0];
                         end
                         
                         // command: select CRC source and reset CRC generator
                         'd3:    
                         begin
-                            next_crc_source_reg = data_in[0];
+                            next_crc_source_reg = data_synced[0];
                             crc_reset = cycle;
                         end
                         
@@ -268,7 +259,7 @@ module spi_controller(
         .rst            ( rst ),              
         .start_write    ( start_write ),      
         .start_read     ( start_read ),       
-        .shift_in       ( data_in ),    
+        .shift_in       ( data_synced ),    
         .shift_out      ( shift_out ),  
         .speed          ( ctrl_reg[1:0] ),
         .crc_reset      ( crc_reset ),        
@@ -282,5 +273,28 @@ module spi_controller(
      
     // spi chip selects
     assign _ss[3:0] = ~select_reg[3:0];
+    
+    //////////////////////////////////////////////////////////////////////////////////////////////////////
+
+    // assert external output enable first to avoid drivers clashing
+    always @(posedge clk or posedge _cs)
+    begin
+        if(_cs) // async reset
+        begin
+            enable_data_out_internal <= 1'b0;
+            enable_data_out_external <= 1'b0;
+        end
+        else if( reg_decode_synced && r_w_synced && !_cs_synced)
+        begin
+            enable_data_out_external <= 1'b1;
+            enable_data_out_internal <= enable_data_out_external; 
+        end  
+    end
+        
+    // data bus tri-state control
+    assign data = (enable_data_out_internal) ? data_out : 8'bz;
+    
+    // external output enable
+    assign ext_oe = enable_data_out_external;
       
 endmodule
