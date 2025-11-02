@@ -215,16 +215,18 @@ module spi_controller_TB();
     task read_spi_single_byte (
         output integer data
         );
-        begin
+        begin : read
+            integer busy;
+            
             write68k(`controller_address, `CMD_SPI_WRITE);
             write68k(`controller_address, 8'hff);
             read68k (`controller_address, data); 
             
             // wait while busy
-            read68k (`controller_address, data); 
-            while(data&1)
+            read68k (`controller_address, busy); 
+            while(busy & 'h80)
             begin
-                read68k (`controller_address, data); 
+                read68k (`controller_address, busy); 
             end
             
             // read data
@@ -247,7 +249,7 @@ module spi_controller_TB();
             
             // wait while busy
             read68k (`controller_address, busy); 
-            while(busy&1)
+            while(busy & 'h80)
             begin
                 read68k (`controller_address, busy); 
             end

@@ -183,7 +183,7 @@ module spi_controller
                 else                
                 begin
                     // read returns shifter busy flag                
-                    next_data_out = {7'bx, busy};
+                    next_data_out = {busy, 7'bx};
                 end
             end
             

@@ -21,25 +21,26 @@ The SPI controller can be in any of the following states:
 
 ### IDLE state
 In this state, commands can be send the the SPI controller.
+After reset, the controller will be in this state.
 A command is 1 byte long. 
 The following commands are supported:
 
 | **command** | **format**  | **description**                    |
 | ----------- | ----------- | ---------------------------------- |
 | NOP         | 0b000x_xxxx | does nothing                       |
-| CONTROL     | 0b001x_xxDD | write control regiser with 0bDD    |
+| CONTROL     | 0b001x_xxDD | write control register with 0bDD    |
 | SELECT      | 0b010x_xDDD | write select register with 0bDDD   |
 | CRC_SOURCE  | 0b011x_xxxD | write crc-source register with 0bD |
 | READ        | 0b100x_xxxx | goto READ state                    |
 | WRITE       | 0b101x_xxxx | goto WRITE state                   |
 | CRC         | 0b110x_xxxx | goto CRC state                     |
 
-When in IDLE mode, a read will return the busy flag in the lowest bit (bit#0), the other bits should masked out and ignored.
+When in IDLE mode, a read will return the busy flag in the highest bit (bit#7), the other bits are undefined and should thus be masked out and ignored. 
 When the busy flag is set, the controller is doing an SPI transaction and no data should be read from or written to the buffer.
 
 #### select register
 This register controls the chip select signals. 
-This register is set to 0x00 after reset.
+This register is set to all zeroes after reset.
 Writing a '1' to a corresponding bit asserts (sets low) the corresponding chip select signal. Only 1 device at a time should be asserted.
 
 | **Bit:**   | 2        | 1    | 0    |
@@ -48,28 +49,28 @@ Writing a '1' to a corresponding bit asserts (sets low) the corresponding chip s
 
 #### control register
 This register controls the configuration of the SPI controller.
-This register is set to 0x00 after reset.
+This register is set to all zeroes after reset.
 Currently, only the SPI clock speed can be set.
 
 | **value** | **clock speed** |
 | --------- | --------------- |
-| $00       | ~ 209 kHz       |
-| $01       | ~ 1.19 MHz      |
-| $10       | ~ 7.12 MHz      |
+| 0b00       | 242 kHz         |
+| 0b01       | 1.6 MHz         |
+| 0b10       | 8 MHz           |
 
 #### crc-source register
 This register selects MOSI or MISO as the CRC generator input. 
-This register is set to 0x00 after reset.
+This register is set to all zeroes after reset.
 Changing the source (writing to this register) also resets the CRC generator to 0x0000.
 
 | **value** | **source**                  |
 | --------- | --------------------------- |
-| $0        | MOSI (compute CRC on write) |
-| $1        | MISO (compute CRC on read)  |
+| 0b0        | MOSI (compute CRC on write) |
+| 0b1        | MISO (compute CRC on read)  |
 
 ### READ state
 This mode is used to read consecutive bytes from the SPI interface.
-Each read cycle return the buffer (which contains the last shifted in data) and starts a new SPI transaction. During this transaction, 1's are shifted out regardless of the buffer contents. When the highest speed is selected, data can be read consecutively without checking the busy flag for maximum throughput.
+Each read cycle return the buffer (which contains the last shifted in data) and starts a new SPI transaction. During this transaction, 1's are shifted out regardless of the buffer contents. When the highest speed is selected, data can be read consecutively without checking the busy flag for maximum throughput. For reading a single byte, the WRITE state should be used.
 
 ### WRITE state
 This mode is used to write a single byte or consecutive bytes to the SPI interface.
