@@ -96,8 +96,8 @@ module top(
     assign miso = ( _sd_ss[0] | sd_miso[0] ) & ( _sd_ss[1] | sd_miso[1] ) & (_eth_ss | eth_miso );
 	 
 	// LEDs
-	assign sd_led  = _sd_ss[0] | _sd_ss[1];
-	assign hdd_led = _sd_ss[0] | _sd_ss[1];
+	assign sd_led  = ~(_sd_ss[0] & _sd_ss[1]);
+	assign hdd_led = ~(_sd_ss[0] & _sd_ss[1]);
 
 	// bus buffer direction
 	assign dir = ~ext_oe;
