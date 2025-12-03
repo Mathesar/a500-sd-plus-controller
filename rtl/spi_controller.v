@@ -50,7 +50,6 @@ module spi_controller
     reg  start_read;
     reg  start_write; 
     reg  crc_reset;
-    wire select,cycle;
     reg  select_latch;
   
     reg  enable_data_out_internal;
@@ -82,7 +81,7 @@ module spi_controller
     //////////////////////////////////////////////////////////////////////////////////////////////////////
 
     // detect start of access cycle
-    assign select = (reg_decode_synced) & e_synced & ~_cs_synced;
+    assign select = e_synced & ~_cs_synced;
     always @(posedge clk or posedge rst)
     begin
         if(rst)
@@ -90,7 +89,7 @@ module spi_controller
         else
             select_latch <= select;
     end
-    assign cycle = select & ~select_latch;
+    assign cycle = reg_decode_synced & select & ~select_latch;
     
     // states    
     localparam IDLE=0, READ=1, WRITE=2, CRC1=3, CRC2=4;
