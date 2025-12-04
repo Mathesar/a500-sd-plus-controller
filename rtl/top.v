@@ -13,8 +13,11 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-// register address, we use the unused CIA register
-`define REGISTER_ADDRESS 4'hb
+// SPI controller address, we use the unused CIA register
+`define SPI_CONTROLLER_ADDRESS 4'hb
+
+// interrupt controller address, we use some unused bits of the CIA ICR register
+`define IRQ_CONTROLLER_ADDRESS 4'hd
 
 module top(
     // CIA piggyback interface
@@ -42,26 +45,23 @@ module top(
     output      [1:0]sd_mosi,       // SD MOSI
     output      [1:0]sd_sclk,       // SD SCLK
     output      [1:0]_sd_ss,        // SD SLAVE SELECTS
-	 output		 sd_led,
-	 output      hdd_led
+	output		sd_led,             // on-board activity LED
+	output      hdd_led             // external activity LED
     );
     
     wire [3:0]_ss;
-        
-    // interrupt pass through
-    assign int_req = ~_eth_int;
-    
+ 
     // reset pass through
     assign _eth_reset = _reset;
     
     // CIA chipselect control
-    wire spi_reg_selected = (rs[3:0] == `REGISTER_ADDRESS) ? 1'b1 : 1'b0;
+    wire spi_reg_selected = (rs[3:0] == `SPI_CONTROLLER_ADDRESS) ? 1'b1 : 1'b0;
     assign _cs_cia = _cs_mb | spi_reg_selected;
         
     // SPI controller
     spi_controller 
 	#( 
-		.REG_ADDR	( `REGISTER_ADDRESS ) 
+		.REG_ADDR	( `SPI_CONTROLLER_ADDRESS ) 
 	) 
 	SPI
  	(
@@ -101,5 +101,26 @@ module top(
 
 	// bus buffer direction
 	assign dir = ~ext_oe;
+    
+    // Interrupt controller
+    irq_controller 
+	#( 
+		.REG_ADDR	( `IRQ_CONTROLLER_ADDRESS ) 
+	) 
+	IRQ
+ 	(
+        .clk        ( clk ), 
+        ._reset     ( _reset ),
+        .r_w        ( r_w ),
+        ._cs        ( _cs_mb ),
+        .e          ( e ),
+        .rs         ( rs[3:0] ),
+        .data       ( data[7:0] ),
+		.irq_enable ( irq_enable )
+    );
+    
+    // interrupt pass-through
+    assign int_req = ~_eth_int & irq_enable;
+
 
 endmodule
