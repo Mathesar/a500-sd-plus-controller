@@ -8,6 +8,8 @@ The SPI controller communicates via the unused register of the odd 8520 CIA at a
 All communication with the SPI controller is done via this single register.
 The behavior of this register depends on the state the SPI controller is in.
 
+Additionally, a simple IRQ controller is included that is able to mask interrupts from the ENC28J60 Ethernet controller.
+
 ## States
 The SPI controller can be in any of the following states:
 
@@ -92,21 +94,28 @@ WRITE 0x00  	// if we were now in READ state, return to IDLE state
 
 ### Read a single byte
 ```
-WRITE 0xA0		// go to WRITE state
-WRITE 0xFF		// start an SPI transaction while shifting out 1's
-READ 			// return to IDLE
-while READ&1;	// loop while busy set
-WRITE 0xA0		// go to WRITE state
-READ data;		// read data
+WRITE 0xA0			// go to WRITE state
+WRITE 0xFF			// start an SPI transaction while shifting out 1's
+READ 				// return to IDLE
+while READ&0x80;	// loop while busy set
+WRITE 0xA0			// go to WRITE state
+READ data;			// read data
 ```
 
 ### Write a single byte
 ```
-WRITE 0xA0		// go to WRITE state
-WRITE data		// start an SPI transaction while shifting out data
-READ 			// return to IDLE
-while READ&1;	// loop while busy set
+WRITE 0xA0			// go to WRITE state
+WRITE data			// start an SPI transaction while shifting out data
+READ 				// return to IDLE
+while READ&0x80;	// loop while busy set
 ```
 
+## IRQ controller
+The IRQ controller allows masking of the ENC28J60 interrupt.
+The IRQ controller communicates via the unused bit5 of the odd 8520 CIA's IRC register at address $BFED01
 
+| 7   | 6   | 5   | 4   | 3      | 2   | 1   | 0   |
+| --- | --- | --- | --- | ------ | --- | --- | --- |
+| S/C |     | ETH | FLG | SERIAL | TOD | TB  | TA  |
 
+It is not possible to read if the Ethernet interrupt bit was set as this will also clear the CIA's interrupts. So, the Ethernet driver shall only write to this bit.
