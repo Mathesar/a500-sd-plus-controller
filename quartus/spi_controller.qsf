@@ -1,0 +1,144 @@
+# -------------------------------------------------------------------------- #
+#
+# Copyright (C) 2020  Intel Corporation. All rights reserved.
+# Your use of Intel Corporation's design tools, logic functions 
+# and other software and tools, and any partner logic 
+# functions, and any output files from any of the foregoing 
+# (including device programming or simulation files), and any 
+# associated documentation or information are expressly subject 
+# to the terms and conditions of the Intel Program License 
+# Subscription Agreement, the Intel Quartus Prime License Agreement,
+# the Intel FPGA IP License Agreement, or other applicable license
+# agreement, including, without limitation, that your use is for
+# the sole purpose of programming logic devices manufactured by
+# Intel and sold by Intel or its authorized distributors.  Please
+# refer to the applicable agreement for further details, at
+# https://fpgasoftware.intel.com/eula.
+#
+# -------------------------------------------------------------------------- #
+#
+# Quartus Prime
+# Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition
+# Date created = 19:26:21  September 10, 2025
+#
+# -------------------------------------------------------------------------- #
+#
+# Notes:
+#
+# 1) The default values for assignments are stored in the file:
+#		spi_controller_assignment_defaults.qdf
+#    If this file doesn't exist, see file:
+#		assignment_defaults.qdf
+#
+# 2) Altera recommends that you do not modify this file. This
+#    file is updated automatically by the Quartus Prime software
+#    and any changes you make may be lost or overwritten.
+#
+# -------------------------------------------------------------------------- #
+
+
+set_global_assignment -name FAMILY "MAX V"
+set_global_assignment -name DEVICE 5M160ZE64I5
+set_global_assignment -name TOP_LEVEL_ENTITY top
+set_global_assignment -name ORIGINAL_QUARTUS_VERSION 20.1.1
+set_global_assignment -name PROJECT_CREATION_TIME_DATE "19:26:21  SEPTEMBER 10, 2025"
+set_global_assignment -name LAST_QUARTUS_VERSION "20.1.1 Lite Edition"
+set_global_assignment -name PROJECT_OUTPUT_DIRECTORY output_files
+set_global_assignment -name MIN_CORE_JUNCTION_TEMP "-40"
+set_global_assignment -name MAX_CORE_JUNCTION_TEMP 125
+set_global_assignment -name DEVICE_FILTER_PACKAGE "ANY QFP"
+set_global_assignment -name DEVICE_FILTER_SPEED_GRADE 5
+set_global_assignment -name ERROR_CHECK_FREQUENCY_DIVISOR "-1"
+set_global_assignment -name EDA_DESIGN_ENTRY_SYNTHESIS_TOOL Synplify
+set_global_assignment -name EDA_LMF_FILE synplcty.lmf -section_id eda_design_synthesis
+set_global_assignment -name EDA_INPUT_DATA_FORMAT VQM -section_id eda_design_synthesis
+set_global_assignment -name EDA_SIMULATION_TOOL "ModelSim-Altera (Verilog)"
+set_global_assignment -name EDA_TIME_SCALE "1 ps" -section_id eda_simulation
+set_global_assignment -name EDA_OUTPUT_DATA_FORMAT "VERILOG HDL" -section_id eda_simulation
+set_global_assignment -name EDA_GENERATE_FUNCTIONAL_NETLIST OFF -section_id eda_board_design_timing
+set_global_assignment -name EDA_GENERATE_FUNCTIONAL_NETLIST OFF -section_id eda_board_design_symbol
+set_global_assignment -name EDA_GENERATE_FUNCTIONAL_NETLIST OFF -section_id eda_board_design_signal_integrity
+set_global_assignment -name EDA_GENERATE_FUNCTIONAL_NETLIST OFF -section_id eda_board_design_boundary_scan
+set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "NO HEAT SINK WITH STILL AIR"
+set_global_assignment -name OPTIMIZATION_MODE BALANCED
+set_global_assignment -name DEVICE_FILTER_PIN_COUNT 64
+set_location_assignment PIN_3 -to data[0]
+set_location_assignment PIN_2 -to data[1]
+set_location_assignment PIN_1 -to data[2]
+set_location_assignment PIN_60 -to data[7]
+set_location_assignment PIN_61 -to data[6]
+set_location_assignment PIN_62 -to data[5]
+set_location_assignment PIN_63 -to data[4]
+set_location_assignment PIN_64 -to data[3]
+set_location_assignment PIN_9 -to clk
+set_location_assignment PIN_12 -to _cs_cia
+set_location_assignment PIN_48 -to _cs_mb
+set_location_assignment PIN_31 -to _eth_int
+set_location_assignment PIN_36 -to _eth_reset
+set_location_assignment PIN_35 -to _eth_ss
+set_location_assignment PIN_40 -to _reset
+set_location_assignment PIN_20 -to _sd_ss[0]
+set_location_assignment PIN_30 -to _sd_ss[1]
+set_location_assignment PIN_46 -to e
+set_location_assignment PIN_32 -to eth_miso
+set_location_assignment PIN_33 -to eth_mosi
+set_location_assignment PIN_34 -to eth_sclk
+set_location_assignment PIN_50 -to r_w
+set_location_assignment PIN_47 -to rs[3]
+set_location_assignment PIN_49 -to rs[2]
+set_location_assignment PIN_51 -to rs[1]
+set_location_assignment PIN_52 -to rs[0]
+set_location_assignment PIN_27 -to sd_miso[1]
+set_location_assignment PIN_13 -to sd_miso[0]
+set_location_assignment PIN_29 -to sd_mosi[1]
+set_location_assignment PIN_19 -to sd_mosi[0]
+set_location_assignment PIN_28 -to sd_sclk[1]
+set_location_assignment PIN_18 -to sd_sclk[0]
+set_location_assignment PIN_53 -to hdd_led
+set_location_assignment PIN_26 -to sd_led
+set_instance_assignment -name SLOW_SLEW_RATE ON -to data[7]
+set_instance_assignment -name SLOW_SLEW_RATE ON -to data[6]
+set_instance_assignment -name SLOW_SLEW_RATE ON -to data[5]
+set_instance_assignment -name SLOW_SLEW_RATE ON -to data[4]
+set_instance_assignment -name SLOW_SLEW_RATE ON -to data[3]
+set_instance_assignment -name SLOW_SLEW_RATE ON -to data[2]
+set_instance_assignment -name SLOW_SLEW_RATE ON -to data[1]
+set_instance_assignment -name SLOW_SLEW_RATE ON -to data[0]
+set_instance_assignment -name SLOW_SLEW_RATE ON -to sd_mosi[1]
+set_instance_assignment -name SLOW_SLEW_RATE ON -to sd_mosi[0]
+set_instance_assignment -name SLOW_SLEW_RATE ON -to sd_mosi
+set_instance_assignment -name SLOW_SLEW_RATE ON -to sd_sclk[1]
+set_instance_assignment -name SLOW_SLEW_RATE ON -to sd_sclk[0]
+set_instance_assignment -name SLOW_SLEW_RATE ON -to sd_sclk
+set_instance_assignment -name SLOW_SLEW_RATE ON -to _sd_ss[1]
+set_instance_assignment -name SLOW_SLEW_RATE ON -to _sd_ss[0]
+set_instance_assignment -name SLOW_SLEW_RATE ON -to _sd_ss
+set_instance_assignment -name SLOW_SLEW_RATE ON -to _eth_reset
+set_instance_assignment -name SLOW_SLEW_RATE ON -to _eth_ss
+set_instance_assignment -name SLOW_SLEW_RATE ON -to _cs_cia
+set_instance_assignment -name SLOW_SLEW_RATE ON -to eth_mosi
+set_instance_assignment -name SLOW_SLEW_RATE ON -to sd_led
+set_instance_assignment -name SLOW_SLEW_RATE ON -to hdd_led
+set_instance_assignment -name SLOW_SLEW_RATE ON -to eth_sclk
+set_instance_assignment -name CURRENT_STRENGTH_NEW 8MA -to _cs_cia
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to data[1]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to data[2]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to data[3]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to data[4]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to data[5]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to data[6]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to data[7]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to data[0]
+set_instance_assignment -name CURRENT_STRENGTH_NEW "MINIMUM CURRENT" -to data
+set_location_assignment PIN_54 -to int_req
+set_instance_assignment -name SLOW_SLEW_RATE ON -to int_req
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to dir
+set_instance_assignment -name IO_STANDARD "3.3-V LVTTL" -to int_req
+set_location_assignment PIN_59 -to dir
+set_instance_assignment -name SLOW_SLEW_RATE ON -to dir
+set_global_assignment -name VERILOG_FILE ../rtl/68k_bus_sync.v
+set_global_assignment -name VERILOG_FILE ../rtl/top.v
+set_global_assignment -name VERILOG_FILE ../rtl/spi_controller.v
+set_global_assignment -name VERILOG_FILE ../rtl/shifter.v
+set_global_assignment -name VERILOG_FILE ../rtl/irq_controller.v
+set_global_assignment -name SDC_FILE spi_controller.out.sdc
