@@ -29,15 +29,15 @@ On a standard Amiga 500 with a 7MHz 68000 the following performance can be expec
 Much better performance can be expected when a faster processor is installed.
 
 ## Pictures
-![alt text](D:\Projects\A500_SPI\a500-sd-plus-controller\Pictures\a500-sd-plus-controller-render-front.jpg)
+![alt text](Pictures\a500-sd-plus-controller-render-front.jpg)
 
-![alt text](D:\Projects\A500_SPI\a500-sd-plus-controller\Pictures\a500-sd-plus-controller-render-back.jpg)
+![alt text](Pictures\a500-sd-plus-controller-render-back.jpg)
 
 Proof that this was actually built:
-![alt text](D:\Projects\A500_SPI\a500-sd-plus-controller\Pictures\A500-SD-Plus-Controller-installed.jpg)
+![alt text](Pictures\A500-SD-Plus-Controller-installed.jpg)
 
 And the obligatory SysInfo screenshot:
-![alt text](D:\Projects\A500_SPI\a500-sd-plus-controller\Pictures\A500-SD-Plus-Controller-SysInfo.jpg)
+![alt text](Pictures\A500-SD-Plus-Controller-SysInfo.jpg)
 
 
 
