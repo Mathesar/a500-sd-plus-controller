@@ -8,6 +8,7 @@ The controller piggybacks on the odd CIA (CIA A) chip on the Amiga 500 motherboa
 * [Drivers](#drivers)
 * [Performance](#performance)
 * [Pictures](#pictures)
+* [Building](#building)
 
 ## Micro-SD
 The two Micro-SD cards are operated in SPI mode.
@@ -45,6 +46,9 @@ Proof that this was actually built:
 And the obligatory SysInfo screenshot:
 ![alt text](Pictures/A500-SD-Plus-Controller-SysInfo.jpg)
 
-
+##Building
+Under [releases](https://github.com/Mathesar/a500-sd-plus-controller/releases) you will find the latest gerbers, bill of materials, bitstream, etc.
+The files are in a format that is suitable for most well-known PCBA manufacturers.
+I would recommend having the boards soldered professionally. This project uses small compononent and especially the CPLD is not solderable by hand. I had the boards made with all the SMD parts and the ethernet connector mounted. I only soldered the pinheaders and the CIA socket myself. For the pinheaders that plug into the CIA socket on the A500 motherboard, be sure to use the THIN and ROUND (aka "turned") pinheaders. Otherwise the motherboard socket will be damaged.
 
 
