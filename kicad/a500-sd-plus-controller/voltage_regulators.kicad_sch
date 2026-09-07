@@ -1904,6 +1904,24 @@
 				(hide yes)
 			)
 		)
+		(property "MPN" "EH71CM101E07OT"
+			(at 105.41 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C112487"
+			(at 105.41 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(property "Quantity" "${QUANTITY}"
 			(at 105.41 105.41 0)
 			(effects
