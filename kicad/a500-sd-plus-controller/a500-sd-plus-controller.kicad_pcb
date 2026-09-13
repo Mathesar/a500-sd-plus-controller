@@ -5216,7 +5216,7 @@
 		(path "/c0bdf5dd-5360-433f-a164-0b7b20a83020/02beead7-21c9-4b6d-905d-9bb13e9fc06e")
 		(sheetname "/Mainboard interface/")
 		(sheetfile "mainboard_riser.kicad_sch")
-		(attr through_hole)
+		(attr through_hole dnp)
 		(fp_line
 			(start 1.16 49.59)
 			(end 14.08 49.59)
@@ -59398,7 +59398,7 @@
 		(effects
 			(font
 				(size 1 1)
-				(thickness 0.1)
+				(thickness 0.15)
 			)
 			(justify left bottom)
 		)
@@ -59434,7 +59434,7 @@
 		(effects
 			(font
 				(size 1 1)
-				(thickness 0.125)
+				(thickness 0.15)
 			)
 			(justify left bottom)
 		)
